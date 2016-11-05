@@ -5,8 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.widget.GridView;
+
+import com.meetic.dragueur.DraggableView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     ImageArrayAdapter adapter;
-    GridView pages;
+    RecyclerView pages;
+    RecyclerView.LayoutManager manager;
+    DraggableView draggableView;
     //ProgressBar bar;
     //File folder;
 
@@ -32,15 +37,17 @@ public class MainActivity extends AppCompatActivity {
         //Log.d("files", files.toString());
         bitmaps = new ArrayList<Bitmap>();
 
-        adapter = new ImageArrayAdapter(this, bitmaps);
+        adapter = new ImageArrayAdapter(bitmaps);
         new ThumbNailTask().execute();
 
-        pages = (GridView) findViewById(R.id.test_list);
+        pages = (RecyclerView) findViewById(R.id.test_list);
+        manager = new StaggeredGridLayoutManager(3,1);
+        pages.setLayoutManager(manager);
+
         //bar = (ProgressBar) findViewById(R.id.progressBar);
         //pages.setAdapter(adapter);
 
     }
-
 
 
     public class ThumbNailTask extends AsyncTask<Object,Object,Bitmap> {
@@ -70,6 +77,24 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
             Log.d("path", cbr.getPages().toString());
+            /*draggableView = (DraggableView) findViewById(R.id.drag);
+            draggableView.setRotationValue(5f);
+            draggableView.setRotationEnabled(true);
+            draggableView.setMaxDragPercentageY(-170f);
+            draggableView.setViewAnimator(new ExitViewAnimator());
+            draggableView.setDragListener(new DraggableView.DraggableViewListenerAdapter() {
+
+
+
+                @Override
+                public void onDraggedEnded(DraggableView draggableView, Direction direction) {
+                    draggableView.setDraggable(true);
+                    draggableView.animateToOrigin(300);
+
+                }
+
+
+            });*/
 
 
 

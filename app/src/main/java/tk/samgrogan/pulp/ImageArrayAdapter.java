@@ -1,128 +1,59 @@
 package tk.samgrogan.pulp;
 
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-
-import com.meetic.dragueur.Direction;
-import com.meetic.dragueur.DraggableView;
 
 import java.util.List;
 
 /**
  * Created by Gh0st on 1/16/2016.
  */
-public class ImageArrayAdapter extends ArrayAdapter<Bitmap>{
+public class ImageArrayAdapter extends RecyclerView.Adapter<ImageArrayAdapter.ViewHolder> {
 
     List<Bitmap> files;
     LayoutInflater mInflater;
 
 
-    public ImageArrayAdapter(Context context, List<Bitmap> imageUrls){
-        super(context, R.layout.first_page_display, imageUrls);
+    public ImageArrayAdapter( List<Bitmap> imageUrls){
         this.files = imageUrls;
 
+    }
 
 
-
+    @Override
+    public ImageArrayAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View inflater = LayoutInflater.from(parent.getContext()).inflate(R.layout.first_page_display,null);
+        ViewHolder viewHolder = new ViewHolder(inflater);
+        return viewHolder;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customView = null;
-
-
-        ViewHolder viewHolder;
-
-        if (customView == null) {
-            customView = inflater.inflate(R.layout.first_page_display, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.imageView = (ImageView) customView.findViewById(R.id.cover_image);
-            viewHolder.draggableView = (DraggableView) customView.findViewById(R.id.drag);
-            viewHolder.draggableView.setDragListener(new DraggableView.DraggableViewListener() {
-                @Override
-                public void onDrag(DraggableView draggableView, float percentX, float percentY) {
-                    draggableView.setExitDiration(500);
-                    draggableView.setTouchInterceptSensibility(30f);
-                }
-
-                @Override
-                public void onDraggedStarted(DraggableView draggableView, Direction direction) {
-
-                }
-
-                @Override
-                public void onDraggedEnded(DraggableView draggableView, Direction direction) {
-                    draggableView.setDraggable(true);
-                    draggableView.animateToOrigin(300);
-
-                }
-
-                @Override
-                public void onDragCancelled(DraggableView draggableView) {
-
-                }
-            });
-            customView.setTag(viewHolder);
-        }
-        else {
-            viewHolder = (ViewHolder) customView.getTag();
-        }
-
-        Bitmap singleItem = files.get(position);
-
-
-        //new ThumbNailTask(viewHolder.imageView).execute(singleItem);
-        viewHolder.imageView.setImageBitmap(singleItem);
-
-
-        return customView;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.bitmap.setImageBitmap(files.get(position));
     }
 
-    /*public class ThumbNailTask extends AsyncTask<Object,Object,Bitmap> {
-        WeakReference<ImageView> img;
 
-        public ThumbNailTask(ImageView imageView){
-            img = new WeakReference<ImageView>(imageView);
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+
+        public ImageView bitmap;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            bitmap = (ImageView) itemView.findViewById(R.id.cover_image);
         }
-
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-            ReadCBR cbr = new ReadCBR();
-            cbr.read(params[0].toString());
-            cbr.getCbr();
-            Bitmap bitmap;
-            bitmap = cbr.getPage(1,450);
-            cbr.close();
-
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if (img != null && bitmap != null){
-                final ImageView imageView = img.get();
-                if (imageView != null){
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-
-        }
-    }*/
-
-    public static class ViewHolder {
-
-        public ImageView imageView;
-        public DraggableView draggableView;
     }
+
+
+
+    @Override
+    public int getItemCount() {
+        return files.size();
+    }
+
 
 
 }

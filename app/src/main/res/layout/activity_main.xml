@@ -3,17 +3,16 @@
      android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/test_list"
         android:layout_marginTop="8dp"
         android:columnWidth="110dp"
         android:numColumns="auto_fit"
-        android:verticalSpacing="10dp"
+        android:verticalSpacing="8dp"
         android:horizontalSpacing="8dp"
         android:stretchMode="columnWidth"
-        android:gravity="center"
         android:clipChildren="true"
         android:clipToPadding="true" />
 
