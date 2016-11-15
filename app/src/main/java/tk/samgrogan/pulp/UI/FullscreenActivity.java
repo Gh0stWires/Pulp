@@ -1,13 +1,23 @@
 package tk.samgrogan.pulp.UI;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.github.junrar.rarfile.FileHeader;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.R;
 
 /**
@@ -85,15 +95,45 @@ public class FullscreenActivity extends AppCompatActivity {
         }
     };
 
+    File mFilename;
+    List<Bitmap> bitmaps;
+    ViewPager viewPager;
+    ComicPageAdapter comicPageAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
-
+        bitmaps = new ArrayList<>();
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+        viewPager = (ViewPager)findViewById(R.id.pages);
+        comicPageAdapter = new ComicPageAdapter(this, bitmaps);
+        mFilename = (File) getIntent().getExtras().get("filename");
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                //new GetBits().execute(position);
+                //comicPageAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        new GetBits().execute(1);
 
 
         // Set up the user interaction to manually show or hide the system UI.
@@ -108,6 +148,37 @@ public class FullscreenActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+    }
+
+    class GetBits extends AsyncTask<Integer, Object, Bitmap>{
+        ReadCBR cbr;
+        File file = new File(mFilename.getPath());
+        @Override
+        protected Bitmap doInBackground(Integer... params) {
+            cbr = new ReadCBR();
+            cbr.read(file.toString());
+            cbr.getCbr();
+            int pageNum = params[0];
+            List<FileHeader> fileHeaderList = cbr.getPages();
+            //for (int i = 0; i < fileHeaderList.size(); i++) {
+                //cbr.getBitmapFile(getApplicationContext(), i);
+            bitmaps.add(cbr.getPage(pageNum, 450));
+
+            //bitmaps.add(cbr.getPage(5, 450));
+
+            //}
+            cbr.close();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            //comicPageAdapter.notifyDataSetChanged();
+            viewPager.setAdapter(comicPageAdapter);
+
+
+        }
     }
 
     @Override

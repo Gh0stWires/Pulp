@@ -10,6 +10,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".UI.MainActivity">
@@ -23,7 +24,11 @@
             android:name=".UI.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".UI.Reader"
+            android:label="@string/title_activity_reader"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

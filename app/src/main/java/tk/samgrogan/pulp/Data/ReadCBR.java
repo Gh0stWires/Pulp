@@ -1,5 +1,6 @@
 package tk.samgrogan.pulp.Data;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -9,8 +10,12 @@ import com.github.junrar.exception.RarException;
 import com.github.junrar.rarfile.FileHeader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -81,7 +86,7 @@ public class ReadCBR {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
-        int inSampleSize = 1;
+        int inSampleSize = 4;
 
         if (height > reqHeight || width > reqWidth) {
 
@@ -99,11 +104,19 @@ public class ReadCBR {
     }
 
 
-    /*public File getBitmapFile(Context context, int pageNum){
+    public File getBitmapFile(Context context, int pageNum){
         List<FileHeader> files = getHeaders();
-        cbr.extractFile(files.get(pageNum), context.openFileOutput());
-        File file = new File();
-    }*/
+        File file = new File(String.valueOf(context.getCacheDir()));
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            cbr.extractFile(files.get(pageNum), outputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (RarException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 
 
 
@@ -121,6 +134,7 @@ public class ReadCBR {
             }finally {
                 if (in != null){
                     in.close();
+
                 }
 
             }
@@ -167,5 +181,50 @@ public class ReadCBR {
         public int compare(FileHeader lhs, FileHeader rhs) {
             return lhs.getFileNameString().compareTo(rhs.getFileNameString());
         }
+    }
+
+
+    public Bitmap getPageFile(Context context,int pageNum, int maxLength){
+        Bitmap bitmap = null;
+        try{
+            FileInputStream in = null;
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            List<File> files = new ArrayList<>();
+            Collections.addAll(files, getBitmapFile(context, pageNum));
+
+            try {
+                opt.inJustDecodeBounds = true;
+                in = new FileInputStream(files.get(pageNum));
+                BitmapFactory.decodeStream(in, null, opt);
+            }finally {
+                if (in != null){
+                    in.close();
+
+                }
+
+            }
+            in = null;
+
+            //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
+
+            opt.inSampleSize = calculateInSampleSize(opt, opt.outWidth, opt.outHeight) / maxLength;
+            opt.inJustDecodeBounds = false;
+
+
+            try {
+                in = new FileInputStream(files.get(pageNum));
+                bitmap = BitmapFactory.decodeStream(in, null, opt);
+            } finally {
+                if (in != null){
+                    in.close();
+                }
+
+            }
+
+
+        } catch (IOException e){
+            Log.e("Error loading bitmap", e.toString());
+        }
+        return bitmap;
     }
 }

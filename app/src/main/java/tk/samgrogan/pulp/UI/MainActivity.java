@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.daprlabs.cardstack.SwipeDeck;
+import com.github.junrar.rarfile.FileHeader;
 import com.meetic.dragueur.DraggableView;
 
 import java.io.File;
@@ -16,8 +17,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import tk.samgrogan.pulp.R;
 import tk.samgrogan.pulp.Data.ReadCBR;
+import tk.samgrogan.pulp.Models.Comics;
+import tk.samgrogan.pulp.R;
 import tk.samgrogan.pulp.SwipeDeckAdapter;
 import tk.samgrogan.pulp.WobblyLayoutManager;
 
@@ -26,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     SwipeDeckAdapter adapter;
     SwipeDeck pages;
-
+    List<FileHeader> sendMaps;
     WobblyLayoutManager manager;
     DraggableView draggableView;
+    Comics comics = new Comics();
     //ProgressBar bar;
     //File folder;
 
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void cardSwipedRight(int position) {
-                Intent intent = new Intent(getApplicationContext(),FullscreenActivity.class);
+                Intent intent = new Intent(getApplicationContext(),FullscreenActivity.class).putExtra("filename",  comics.getFilenames(position));
                 startActivity(intent);
 
             }
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("files",files.toString());
             for (int i = 0; i < files.size(); i++){
                 File file = files.get(i);
+                comics.setFilenames(file);
                 cbr.read(file.toString());
                 cbr.getCbr();
                 bitmaps.add(cbr.getPage(1, 450));
@@ -113,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
 
-            Log.d("path", cbr.getPages().toString());
+
             /**/
 
 
