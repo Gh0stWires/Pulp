@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp;
+package tk.samgrogan.pulp.Data;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import tk.samgrogan.pulp.RARFile;
 
 /**
  * Created by gh0st on 2/25/16.

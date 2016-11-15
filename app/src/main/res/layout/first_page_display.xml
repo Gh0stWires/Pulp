@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.meetic.dragueur.DraggableView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cover_image"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/drag">
-
-
-        <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/cover_image"
-            android:layout_width="wrap_content"
-            android:layout_height="180dp" />
-</com.meetic.dragueur.DraggableView>
+    android:layout_height="600dp"
+    android:adjustViewBounds="true"/>

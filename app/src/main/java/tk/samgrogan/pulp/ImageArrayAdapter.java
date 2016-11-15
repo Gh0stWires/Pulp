@@ -1,5 +1,6 @@
 package tk.samgrogan.pulp;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,9 +17,11 @@ public class ImageArrayAdapter extends RecyclerView.Adapter<ImageArrayAdapter.Vi
 
     List<Bitmap> files;
     LayoutInflater mInflater;
+    Context mContext;
 
 
-    public ImageArrayAdapter( List<Bitmap> imageUrls){
+    public ImageArrayAdapter(Context context, List<Bitmap> imageUrls){
+        this.mContext = context;
         this.files = imageUrls;
 
     }
@@ -32,18 +35,25 @@ public class ImageArrayAdapter extends RecyclerView.Adapter<ImageArrayAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.bitmap.setImageBitmap(files.get(position));
+        //holder.draggableView.setRotationValue(1f);
+       // holder.draggableView.setRotationEnabled(true);
+
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView bitmap;
+        //public DraggableView draggableView;
+        public RecyclerView recyclerView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             bitmap = (ImageView) itemView.findViewById(R.id.cover_image);
+            //draggableView = (DraggableView) itemView.findViewById(R.id.drag);
+            recyclerView = (RecyclerView) itemView.findViewById(R.id.test_list);
         }
     }
 
