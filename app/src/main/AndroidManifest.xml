@@ -25,10 +25,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".UI.Reader"
-            android:label="@string/title_activity_reader"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".UI.ReaderActivity"></activity>
     </application>
 
 </manifest>

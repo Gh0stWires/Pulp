@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void cardSwipedRight(int position) {
-                Intent intent = new Intent(getApplicationContext(),FullscreenActivity.class).putExtra("filename",  comics.getFilenames(position));
+                Intent intent = new Intent(getApplicationContext(),ReaderActivity.class).putExtra("filename",  comics.getFilenames(position));
                 startActivity(intent);
 
             }
