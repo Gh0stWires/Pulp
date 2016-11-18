@@ -6,4 +6,4 @@ As of right now it only reads cbr files.
 
 
 
-<img src="Screenshots/Screenshot_20161118-153016.png" width="600" height="1200" />
+<img src="Screenshots/Screenshot_20161118-153016.png" width="480" height="840" />
