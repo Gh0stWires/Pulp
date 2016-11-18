@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -86,7 +85,7 @@ public class ReadCBR {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
-        int inSampleSize = 4;
+        int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
 
@@ -118,7 +117,49 @@ public class ReadCBR {
         return file;
     }
 
+    public Bitmap getBitmap(Context context, int page){
+        Bitmap bitmap = null;
+        try{
+            FileInputStream in = null;
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            //List<FileHeader> files = getHeaders();
 
+            try {
+                opt.inJustDecodeBounds = true;
+                in = new FileInputStream(getBitmapFile(context,page));
+                BitmapFactory.decodeStream(in, null, opt);
+            }finally {
+                if (in != null){
+                    in.close();
+
+                }
+
+            }
+            in = null;
+
+            //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
+
+            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
+            opt.inJustDecodeBounds = false;
+
+
+            try {
+                in = new FileInputStream(getBitmapFile(context,page));
+                bitmap = BitmapFactory.decodeStream(in, null, opt);
+            } finally {
+                if (in != null){
+                    in.close();
+                }
+
+            }
+
+
+        } catch (IOException e){
+            Log.e("Error loading bitmap", e.toString());
+        }
+        return bitmap;
+
+    }
 
     public Bitmap getPage(int pageNum, int maxLength){
         Bitmap bitmap = null;
@@ -142,7 +183,7 @@ public class ReadCBR {
 
             //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
 
-            opt.inSampleSize = calculateInSampleSize(opt, opt.outWidth, opt.outHeight) / maxLength;
+            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
             opt.inJustDecodeBounds = false;
 
 
@@ -184,19 +225,21 @@ public class ReadCBR {
     }
 
 
-    public Bitmap getPageFile(Context context,int pageNum, int maxLength){
+    public Bitmap getPageFile(FileHeader fileHeader, int maxLength){
         Bitmap bitmap = null;
         try{
-            FileInputStream in = null;
+            InputStream in = null;
             BitmapFactory.Options opt = new BitmapFactory.Options();
-            List<File> files = new ArrayList<>();
-            Collections.addAll(files, getBitmapFile(context, pageNum));
+
+
 
             try {
                 opt.inJustDecodeBounds = true;
-                in = new FileInputStream(files.get(pageNum));
+                in = cbr.getInputStream(fileHeader);
                 BitmapFactory.decodeStream(in, null, opt);
-            }finally {
+            } catch (RarException e) {
+                e.printStackTrace();
+            } finally {
                 if (in != null){
                     in.close();
 
@@ -212,8 +255,10 @@ public class ReadCBR {
 
 
             try {
-                in = new FileInputStream(files.get(pageNum));
+                in = cbr.getInputStream(fileHeader);
                 bitmap = BitmapFactory.decodeStream(in, null, opt);
+            } catch (RarException e) {
+                e.printStackTrace();
             } finally {
                 if (in != null){
                     in.close();

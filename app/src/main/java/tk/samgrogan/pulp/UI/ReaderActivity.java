@@ -28,22 +28,27 @@ public class ReaderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.fragment_reader);
         mFilename = (File) getIntent().getExtras().get("filename");
         mPager = (ViewPager)findViewById(R.id.pager);
         new GetBits().execute();
-        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fileHeaderList, mFilename);
-        mPager.setAdapter(myPagerAdapter);
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFilename);
+        mPager.setOffscreenPageLimit(3);
 
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         List<FileHeader> data;
         File filename;
-        public MyPagerAdapter(FragmentManager fm, List<FileHeader> data, File filename) {
+        public MyPagerAdapter(FragmentManager fm, File filename) {
             super(fm);
-            this.data = data;
+
             this.filename = filename;
+        }
+
+        public void setData(List<FileHeader> data){
+            this.data = data;
         }
 
         @Override
@@ -73,8 +78,11 @@ public class ReaderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            myPagerAdapter.notifyDataSetChanged();
-            myPagerAdapter.getItem(0);
+            myPagerAdapter.setData(fileHeaderList);
+            mPager.setAdapter(myPagerAdapter);
+
+
+            //myPagerAdapter.getItem(mPager.getCurrentItem());
 
 
 

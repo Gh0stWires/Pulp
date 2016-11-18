@@ -34,19 +34,22 @@ public class ReaderFragement extends Fragment {
         return fragmentFirst;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         page = getArguments().getInt("someInt");
         title = getArguments().getString("someTitle");
-        new GetBits().execute(page);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reader, container, false);
+        View view = inflater.inflate(R.layout.pages, container, false);
         imageView = (ImageView)view.findViewById(R.id.cover_image);
+        new GetBits().execute(page);
 
         return view;
     }
@@ -63,7 +66,7 @@ public class ReaderFragement extends Fragment {
             List<FileHeader> fileHeaderList = cbr.getPages();
             //for (int i = 0; i < fileHeaderList.size(); i++) {
             //cbr.getBitmapFile(getApplicationContext(), i);
-            bitmaps = cbr.getPage(page, 450);
+            bitmaps = cbr.getPage(page, 250);
 
             //bitmaps.add(cbr.getPage(5, 450));
 
@@ -77,6 +80,7 @@ public class ReaderFragement extends Fragment {
             super.onPostExecute(bitmap);
             //comicPageAdapter.notifyDataSetChanged();
             imageView.setImageBitmap(bitmaps);
+
 
 
 
