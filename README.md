@@ -5,4 +5,5 @@ As of right now it only reads cbr files.
 ![demo](Screenshots/Nexus_5X_Recording_20161105_1.gif)
 
 
-![demo](Screenshots/Screenshot_20161118-153016.png =600x600)
+
+<img src="Screenshots/Screenshot_20161118-153016.png" width="200" height="200" />
