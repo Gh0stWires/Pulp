@@ -1,6 +1,8 @@
 package tk.samgrogan.pulp.UI;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import tk.samgrogan.pulp.Data.ComicColumns;
+import tk.samgrogan.pulp.Data.ComicProvider;
 import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     WobblyLayoutManager manager;
     DraggableView draggableView;
     Comics comics = new Comics();
+    Cursor mCursor;
     //ProgressBar bar;
     //File folder;
 
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         //Collections.addAll(files, folder.listFiles());
         //Log.d("files", files.toString());
         bitmaps = new ArrayList<Bitmap>();
+
+        mCursor = getContentResolver().query(ComicProvider.Comics.CONTENT_URI, new String[]{ComicColumns.TITLE},null,null,null);
 
         adapter = new SwipeDeckAdapter(bitmaps,this);
         new ThumbNailTask().execute();
@@ -78,13 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        //manager = new WobblyLayoutManager(this);
-        //pages.setLayoutManager(manager);
-
-
-
-        //bar = (ProgressBar) findViewById(R.id.progressBar);
-        //pages.setAdapter(adapter);
 
     }
 
@@ -94,16 +94,25 @@ public class MainActivity extends AppCompatActivity {
         ReadCBR cbr;
         @Override
         protected Bitmap doInBackground(Object... params) {
-
             cbr = new ReadCBR();
+            ContentValues mNewValues = new ContentValues();
             folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Comics");
             Log.d("path", folder.toString());
             List<File> files = new ArrayList<>();
             Collections.addAll(files, folder.listFiles());
             Log.d("files",files.toString());
             for (int i = 0; i < files.size(); i++){
+                //
                 File file = files.get(i);
                 comics.setFilenames(file);
+                if (mCursor != null && mCursor.getCount() > 0) {
+                    mCursor.moveToPosition(i);
+                    if (!mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)).equals(file.toString())) {
+                        mNewValues.put(ComicColumns.TITLE, file.toString());
+                        getContentResolver().insert(ComicProvider.Comics.CONTENT_URI, mNewValues);
+                    }
+                }
+
                 cbr.read(file.toString());
                 cbr.getCbr();
                 bitmaps.add(cbr.getPage(1, 450));

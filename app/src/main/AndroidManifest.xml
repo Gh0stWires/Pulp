@@ -28,4 +28,9 @@
         <activity android:name=".UI.ReaderActivity"></activity>
     </application>
 
+    <provider
+        android:name=".Data.ComicProvider"
+        android:authorities="tk.samgrogan.pulp.Data.ComicProvider"
+        android:exported="false" />
+
 </manifest>
