@@ -104,16 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 //
                 File file = files.get(i);
                 comics.setFilenames(file);
-                mCursor = getContentResolver().query(ComicProvider.Comics.CONTENT_URI, new String[]{ComicColumns.TITLE}, ComicColumns.TITLE + "= ?",
-                        new String[]{file.toString()},null);
-                if(mCursor.getCount() != 0) {
-                    mCursor.moveToPosition(i);
-                    if (!mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)).equals(file.toString())) {
-                        mNewValues.put(ComicColumns.TITLE, file.toString());
-                        getContentResolver().insert(ComicProvider.Comics.CONTENT_URI, mNewValues);
-                    }
-                }
-
+                mNewValues.put(ComicColumns.TITLE, file.toString());
+                getContentResolver().insert(ComicProvider.Comics.CONTENT_URI, mNewValues);
 
                 cbr.read(file.toString());
                 cbr.getCbr();
@@ -127,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
-            mCursor.close();
+            //Log.d("DB SITE", DebugDB.getAddressLog());
 
 
             /**/

@@ -26,11 +26,13 @@
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/FullscreenTheme" />
         <activity android:name=".UI.ReaderActivity"></activity>
+
+        <provider
+            android:name=".Data.generated.ComicProvider"
+            android:authorities="tk.samgrogan.pulp.Data.ComicProvider"
+            android:exported="false" />
     </application>
 
-    <provider
-        android:name=".Data.ComicProvider"
-        android:authorities="tk.samgrogan.pulp.Data.ComicProvider"
-        android:exported="false" />
+
 
 </manifest>

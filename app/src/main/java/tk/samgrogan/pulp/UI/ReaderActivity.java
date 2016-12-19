@@ -1,5 +1,7 @@
 package tk.samgrogan.pulp.UI;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import tk.samgrogan.pulp.Data.ComicColumns;
+import tk.samgrogan.pulp.Data.ComicProvider;
 import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.R;
 
@@ -24,6 +28,7 @@ public class ReaderActivity extends AppCompatActivity {
     File mFilename;
     ViewPager mPager;
     MyPagerAdapter myPagerAdapter;
+    Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,31 @@ public class ReaderActivity extends AppCompatActivity {
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFilename);
         mPager.setOffscreenPageLimit(3);
 
+        mCursor = getContentResolver().query(ComicProvider.Comics.CONTENT_URI,
+                new String[]{ComicColumns.PAGE}, ComicColumns.TITLE + "= ?",
+                new String[]{mFilename.toString()}, null);
+
+
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                ContentValues mNewValues = new ContentValues();
+                mNewValues.put(ComicColumns.PAGE, position);
+                getContentResolver().update(ComicProvider.Comics.CONTENT_URI,mNewValues,ComicColumns.TITLE + "= ?",
+                        new String[]{mFilename.toString()});
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
@@ -80,6 +110,11 @@ public class ReaderActivity extends AppCompatActivity {
             super.onPostExecute(bitmap);
             myPagerAdapter.setData(fileHeaderList);
             mPager.setAdapter(myPagerAdapter);
+            if (mCursor != null){
+                mCursor.moveToFirst();
+                mPager.setCurrentItem(mCursor.getInt(mCursor.getColumnIndex(ComicColumns.PAGE)));
+
+            }
 
 
             //myPagerAdapter.getItem(mPager.getCurrentItem());
