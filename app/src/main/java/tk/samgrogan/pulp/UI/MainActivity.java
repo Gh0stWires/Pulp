@@ -16,7 +16,6 @@ import com.meetic.dragueur.DraggableView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import tk.samgrogan.pulp.Data.ComicColumns;
@@ -91,14 +90,27 @@ public class MainActivity extends AppCompatActivity {
     public class ThumbNailTask extends AsyncTask<Object,Object,Bitmap> {
         File folder;
         ReadCBR cbr;
+
+        private void rScan(File f, List<File> files){
+            File[] file = f.listFiles();
+            for (File ff : file){
+                if (ff.isDirectory()) rScan(f,files);
+                if (ff.isFile() && ff.getPath().endsWith(".cbr")){
+                    files.add(ff);
+                }
+            }
+        }
+
         @Override
         protected Bitmap doInBackground(Object... params) {
             cbr = new ReadCBR();
             ContentValues mNewValues = new ContentValues();
-            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Comics");
+            folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
             Log.d("path", folder.toString());
             List<File> files = new ArrayList<>();
-            Collections.addAll(files, folder.listFiles());
+            rScan(folder,files);
+            //File[] list = folder.listFiles(new ComicFileFilter());
+            //Collections.addAll(files, list);
             Log.d("files",files.toString());
             for (int i = 0; i < files.size(); i++){
                 //
