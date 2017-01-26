@@ -66,7 +66,7 @@ public class ReaderFragement extends Fragment {
             List<FileHeader> fileHeaderList = cbr.getPages();
             //for (int i = 0; i < fileHeaderList.size(); i++) {
             //cbr.getBitmapFile(getApplicationContext(), i);
-            bitmaps = cbr.getPage(page, 250);
+            bitmaps = cbr.getBitmap(getContext(),page);
 
             //bitmaps.add(cbr.getPage(5, 450));
 

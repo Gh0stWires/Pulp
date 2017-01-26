@@ -3,6 +3,7 @@ package tk.samgrogan.pulp.Data;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 
 import com.github.junrar.Archive;
@@ -19,8 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import tk.samgrogan.pulp.RARFile;
-
 /**
  * Created by gh0st on 2/25/16.
  */
@@ -28,7 +27,6 @@ public class ReadCBR {
 
     String mFileName;
     List<FileHeader> mPages;
-    RARFile mCBR;
     Archive cbr;
 
     public ReadCBR(){
@@ -37,18 +35,7 @@ public class ReadCBR {
 
     public void read(String filename){
         mFileName = filename;
-        /*try {
-            mCBR = new RARFile(filename);
-            mPages = new ArrayList();
-            Enumeration<? extends RAREntry> entries = mCBR.entries();
 
-            while (entries.hasMoreElements()){
-                RAREntry entry = entries.nextElement();
-                mPages.add(entry.getName());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public void close(){
@@ -105,16 +92,24 @@ public class ReadCBR {
 
     public File getBitmapFile(Context context, int pageNum){
         List<FileHeader> files = getHeaders();
-        File file = new File(String.valueOf(context.getCacheDir()));
+        String uri = getmFileName();
+        FileOutputStream file = null;
+        File c = null;
         try {
-            FileOutputStream outputStream = new FileOutputStream(file);
-            cbr.extractFile(files.get(pageNum), outputStream);
+            String fileName = Uri.parse(uri).getLastPathSegment();
+            c = new File(context.getCacheDir() + fileName);
+            file = new FileOutputStream(c);
+            cbr.extractFile(files.get(pageNum),file);
+            file.close();
+
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (RarException e) {
             e.printStackTrace();
         }
-        return file;
+        return c;
     }
 
     public Bitmap getBitmap(Context context, int page){
@@ -122,6 +117,8 @@ public class ReadCBR {
         try{
             FileInputStream in = null;
             BitmapFactory.Options opt = new BitmapFactory.Options();
+            //List<FileHeader> files = getHeaders();
+            //cbr.extractFile();
             //List<FileHeader> files = getHeaders();
 
             try {
@@ -213,7 +210,7 @@ public class ReadCBR {
     }
 
     public String getmFileName(){
-        return mCBR.toString();
+        return cbr.toString();
     }
 
     public static class Comp implements Comparator<FileHeader>{

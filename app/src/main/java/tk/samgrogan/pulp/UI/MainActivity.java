@@ -1,18 +1,22 @@
 package tk.samgrogan.pulp.UI;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
-import com.github.junrar.rarfile.FileHeader;
-import com.meetic.dragueur.DraggableView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,34 +28,31 @@ import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
 import tk.samgrogan.pulp.SwipeDeckAdapter;
-import tk.samgrogan.pulp.WobblyLayoutManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     SwipeDeckAdapter adapter;
     SwipeDeck pages;
-    List<FileHeader> sendMaps;
-    WobblyLayoutManager manager;
-    DraggableView draggableView;
     Comics comics = new Comics();
-    Cursor mCursor;
-    //ProgressBar bar;
-    //File folder;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Comics");
-        //List<File> files = new ArrayList<>();
-        //Collections.addAll(files, folder.listFiles());
-        //Log.d("files", files.toString());
-        bitmaps = new ArrayList<Bitmap>();
+        bitmaps = comics.getBitmaps();
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
+        MobileAds.initialize(getApplicationContext(), getString(R.string.app_pub));
 
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        adapter = new SwipeDeckAdapter(bitmaps, this);
 
-        adapter = new SwipeDeckAdapter(bitmaps,this);
         new ThumbNailTask().execute();
 
         pages = (SwipeDeck) findViewById(R.id.test_list);
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void cardSwipedRight(int position) {
-                Intent intent = new Intent(getApplicationContext(),ReaderActivity.class).putExtra("filename",  comics.getFilenames(position));
+                Intent intent = new Intent(getApplicationContext(), ReaderActivity.class).putExtra("filename", comics.getFilenames(position));
                 startActivity(intent);
 
             }
@@ -84,19 +85,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    new ThumbNailTask().execute();
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+
 
 
     public class ThumbNailTask extends AsyncTask<Object,Object,Bitmap> {
         File folder;
         ReadCBR cbr;
+        List<File> files = new ArrayList<>();
 
-        private void rScan(File f, List<File> files){
-            File[] file = f.listFiles();
-            for (File ff : file){
-                if (ff.isDirectory()) rScan(f,files);
-                if (ff.isFile() && ff.getPath().endsWith(".cbr")){
-                    files.add(ff);
+        private void checkFiles(File dir, List<File> files) {
+            String extension = ".cbr";
+            File[] fileList = dir.listFiles();
+            if (fileList != null) {
+                for (int i = 0; i < fileList.length; i++) {
+                    if (fileList[i].isDirectory()) {
+                        //if this is a directory, loop over the files in the directory
+                        checkFiles(fileList[i], files);
+                    } else {
+                        if (fileList[i].getName().endsWith(extension)) {
+                            //this is the file you want, do whatever with it here
+                            files.add(fileList[i]);
+                        }
+
+                    }
                 }
             }
         }
@@ -107,10 +149,7 @@ public class MainActivity extends AppCompatActivity {
             ContentValues mNewValues = new ContentValues();
             folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
             Log.d("path", folder.toString());
-            List<File> files = new ArrayList<>();
-            rScan(folder,files);
-            //File[] list = folder.listFiles(new ComicFileFilter());
-            //Collections.addAll(files, list);
+            checkFiles(folder,files);
             Log.d("files",files.toString());
             for (int i = 0; i < files.size(); i++){
                 //
@@ -121,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
                 cbr.read(file.toString());
                 cbr.getCbr();
-                bitmaps.add(cbr.getPage(1, 450));
+                //bitmaps.add(cbr.getBitmap(getApplicationContext(), 1));
+                comics.setBitmaps(cbr.getBitmap(getApplicationContext(), 1));
                 cbr.close();
             }
             return null;
