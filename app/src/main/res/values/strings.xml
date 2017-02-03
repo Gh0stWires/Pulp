@@ -2,7 +2,10 @@
     <string name="app_name">Pulp</string>
     <string name="title_activity_reader">Reader</string>
     <string name="action_settings">Settings</string>
-    <string name="banner_ad_unit_id">AD UNIT ID</string>
-    <string name="app_pub">APP PUB</string>
+    <string name="banner_ad_unit_id">ca-app-pub-5232768983698923/4379906293</string>
+    <string name="app_pub">ca-app-pub-5232768983698923~2903173093</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

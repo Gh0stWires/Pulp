@@ -15,12 +15,13 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="376546302947-ca0qv4h0cbo5tlv4n5bbfldrqsj5j9es.apps.googleusercontent.com">
-        </meta-data>
+            android:value="376546302947-ca0qv4h0cbo5tlv4n5bbfldrqsj5j9es.apps.googleusercontent.com"></meta-data>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".UI.MainActivity"
+
+        <activity
+            android:name=".UI.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +29,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".UI.ReaderActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".UI.ReaderActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".Data.generated.ComicProvider"
             android:authorities="tk.samgrogan.pulp.Data.ComicProvider"
             android:exported="false" />
+
+        <receiver android:name=".Data.ComicListWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/comic_list_widget_info" />
+        </receiver>
+
     </application>
-
-
 
 </manifest>
