@@ -51,8 +51,11 @@ public class ComicRemoteFactory implements RemoteViewsService.RemoteViewsFactory
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.list_item_textview);
+        //
         if (mCursor.moveToPosition(position)){
-            views.setTextViewText(R.id.list_item,mCursor.getColumnName(mCursor.getColumnIndex(ComicColumns.TITLE)));
+            String title = mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE));
+            views.setTextViewText(R.id.list_item, title.substring(title.lastIndexOf("/") + 1, title.length() - 4).trim());
+            views.setTextViewText(R.id.page_num, mCursor.getString(mCursor.getColumnIndex(ComicColumns.PAGE)));
         }
         return views;
     }
