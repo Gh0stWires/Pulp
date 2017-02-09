@@ -26,7 +26,7 @@ import tk.samgrogan.pulp.R;
 public class ReaderActivity extends AppCompatActivity {
 
     List<FileHeader> fileHeaderList = new ArrayList<>();
-    File mFilename;
+    String mFilename;
     ViewPager mPager;
     MyPagerAdapter myPagerAdapter;
     Cursor mCursor;
@@ -42,7 +42,7 @@ public class ReaderActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         setContentView(R.layout.fragment_reader);
-        mFilename = (File) getIntent().getExtras().get("filename");
+        mFilename = (String) getIntent().getExtras().get("filename");
         mPager = (ViewPager)findViewById(R.id.pager);
         new GetBits().execute();
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFilename);
@@ -50,7 +50,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         mCursor = getContentResolver().query(ComicProvider.Comics.CONTENT_URI,
                 new String[]{ComicColumns.PAGE}, ComicColumns.TITLE + "= ?",
-                new String[]{mFilename.toString()}, null);
+                new String[]{mFilename}, null);
 
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -77,8 +77,8 @@ public class ReaderActivity extends AppCompatActivity {
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         List<FileHeader> data;
-        File filename;
-        public MyPagerAdapter(FragmentManager fm, File filename) {
+        String filename;
+        public MyPagerAdapter(FragmentManager fm, String filename) {
             super(fm);
 
             this.filename = filename;
@@ -90,7 +90,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return ReaderFragement.newInstance(position,filename.getPath());
+            return ReaderFragement.newInstance(position,filename);
         }
 
         @Override
@@ -101,7 +101,7 @@ public class ReaderActivity extends AppCompatActivity {
 
     class GetBits extends AsyncTask<Integer, Object, Bitmap> {
         ReadCBR cbr;
-        File file = new File(mFilename.getPath());
+        File file = new File(mFilename);
         @Override
         protected Bitmap doInBackground(Integer... params) {
             cbr = new ReadCBR();

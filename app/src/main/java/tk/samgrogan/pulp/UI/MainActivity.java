@@ -4,11 +4,15 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,11 +33,13 @@ import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
 import tk.samgrogan.pulp.SwipeDeckAdapter;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     SwipeDeckAdapter adapter;
     SwipeDeck pages;
+    Cursor mCursor;
+    private static final int CURSOR_LOADER_ID = 0;
     Comics comics = new Comics();
 
 
@@ -54,6 +60,7 @@ public class MainActivity extends AppCompatActivity  {
         adapter = new SwipeDeckAdapter(bitmaps, this);
 
         new ThumbNailTask().execute();
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
         pages = (SwipeDeck) findViewById(R.id.test_list);
         pages.setEventCallback(new SwipeDeck.SwipeEventCallback() {
@@ -64,7 +71,9 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void cardSwipedRight(int position) {
-                Intent intent = new Intent(getApplicationContext(), ReaderActivity.class).putExtra("filename", comics.getFilenames(position));
+                mCursor.moveToPosition(position);
+                String fileName = mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE));
+                Intent intent = new Intent(getApplicationContext(), ReaderActivity.class).putExtra("filename", fileName);
                 startActivity(intent);
 
             }
@@ -115,7 +124,20 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this,ComicProvider.Comics.CONTENT_URI,new String[]{ComicColumns.TITLE, ComicColumns.PAGE},null,null,null);
+    }
 
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursor = data;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 
 
 
