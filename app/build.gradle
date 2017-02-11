@@ -35,7 +35,8 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0' 
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     compile 'com.google.firebase:firebase-ads:10.0.1'
     compile 'com.github.junrar:junrar:0.7'
     compile 'com.android.support:recyclerview-v7:23.4.0'

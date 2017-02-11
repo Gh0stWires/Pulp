@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="376546302947-ca0qv4h0cbo5tlv4n5bbfldrqsj5j9es.apps.googleusercontent.com"></meta-data>
+            android:value="376546302947-ca0qv4h0cbo5tlv4n5bbfldrqsj5j9es.apps.googleusercontent.com" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -49,10 +49,12 @@
                 android:resource="@xml/comic_list_widget_info" />
         </receiver>
 
-        <service android:name=".Data.ComicRemoteService"
+        <service
+            android:name=".Data.ComicRemoteService"
             android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <activity android:name=".UI.Bridgette"></activity>
     </application>
 
 </manifest>

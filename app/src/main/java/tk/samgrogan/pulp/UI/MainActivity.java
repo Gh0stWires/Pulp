@@ -1,8 +1,11 @@
 package tk.samgrogan.pulp.UI;
 
 import android.Manifest;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,11 +13,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     SwipeDeckAdapter adapter;
     SwipeDeck pages;
     Cursor mCursor;
+    DrawerLayout mDrawer;
+    ActionBarDrawerToggle mToggle;
     private static final int CURSOR_LOADER_ID = 0;
     Comics comics = new Comics();
 
@@ -49,6 +54,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bitmaps = comics.getBitmaps();
+
+        /*Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);*/
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer);
+        mToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.open, R.string.close);
+
+        mDrawer.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
@@ -97,6 +114,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -202,4 +227,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         }
     }
+
+
 }

@@ -6,6 +6,14 @@
     <string name="app_pub">ca-app-pub-5232768983698923~2903173093</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
     <string name="add_widget">Add widget</string>
+    <string name="title_activity_collection_maker">CollectionMaker</string>
+    <string name="title_activity_collection_drawer">CollectionDrawer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_create_collection">CreateCollection</string>
 
 </resources>
