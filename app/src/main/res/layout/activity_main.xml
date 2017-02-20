@@ -1,53 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/drawer"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.daprlabs.cardstack.SwipeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        xmlns:swipedeck="http://schemas.android.com/tools"
+<com.daprlabs.cardstack.SwipeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:swipedeck="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    android:background="@color/pulp"
+    android:orientation="vertical">
+
+    <!---->
+
+    <!--<include layout="@layout/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        xmlns:android="http://schemas.android.com/apk/res/android"/>-->
+
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id" />
+
+
+
+    <com.daprlabs.cardstack.SwipeDeck
+        android:id="@+id/test_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/pulp"
-        android:orientation="vertical">
-
-        <!--<android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />-->
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id" />
+        swipedeck:render_above="false" />
 
 
-        <com.daprlabs.cardstack.SwipeDeck
-            android:id="@+id/test_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            swipedeck:render_above="false"/>
-
-    </com.daprlabs.cardstack.SwipeLinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/pulp"
-        app:menu="@menu/nav_drawer">
-
-    </android.support.design.widget.NavigationView>
 
 
-</android.support.v4.widget.DrawerLayout>
+
+</com.daprlabs.cardstack.SwipeLinearLayout>
+
+
+
+
 

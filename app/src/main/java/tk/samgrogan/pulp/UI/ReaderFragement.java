@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.List;
 
 import tk.samgrogan.pulp.Data.ReadCBR;
+import tk.samgrogan.pulp.Data.ReadCBZ;
 import tk.samgrogan.pulp.R;
 
 
@@ -56,22 +57,32 @@ public class ReaderFragement extends Fragment {
 
     class GetBits extends AsyncTask<Integer, Object, Bitmap> {
         ReadCBR cbr;
+        ReadCBZ cbz;
         File file = new File(title);
         @Override
         protected Bitmap doInBackground(Integer... params) {
-            cbr = new ReadCBR();
-            cbr.read(file.toString());
-            cbr.getCbr();
-            int pageNum = params[0];
-            List<FileHeader> fileHeaderList = cbr.getPages();
-            //for (int i = 0; i < fileHeaderList.size(); i++) {
-            //cbr.getBitmapFile(getApplicationContext(), i);
-            bitmaps = cbr.getBitmap(getContext(),page);
+            if (file.getName().endsWith(".cbr")) {
+                cbr = new ReadCBR();
+                cbr.read(file.toString());
+                cbr.getCbr();
+                int pageNum = params[0];
+                List<FileHeader> fileHeaderList = cbr.getPages();
+                //for (int i = 0; i < fileHeaderList.size(); i++) {
+                //cbr.getBitmapFile(getApplicationContext(), i);
+                bitmaps = cbr.getBitmap(getContext(), page);
+                cbr.close();
+            }else {
+                cbz = new ReadCBZ();
+                cbz.read(file.toString());
+                cbz.getCbz();
+                cbz.CbzComic();
+                bitmaps = cbz.getPage(page);
+            }
 
             //bitmaps.add(cbr.getPage(5, 450));
 
             //}
-            cbr.close();
+
             return null;
         }
 

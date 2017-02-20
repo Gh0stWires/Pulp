@@ -1,7 +1,15 @@
 package tk.samgrogan.pulp.Data;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
@@ -12,6 +20,7 @@ public class ReadCBZ {
 
     String mFileName;
     ZipFile cbz;
+    ArrayList mPages;
 
 
     public ReadCBZ(){}
@@ -30,6 +39,41 @@ public class ReadCBZ {
         return cbz;
     }
 //TODO
+public void CbzComic() {
+
+    // populate mPages with the names of all the ZipEntries
+    //cbz = new ZipFile(mFileName);
+    mPages = new ArrayList<String>();
+    Enumeration<? extends ZipEntry> entries = cbz.entries();
+    while (entries.hasMoreElements()) {
+        ZipEntry entry = entries.nextElement();
+
+        mPages.add(entry.getName());
+
+    }
+
+}
+    public List getPages(){
+        return mPages;
+    }
+
+    public Bitmap getPage(int pageNum) {
+        Bitmap bitmap = null;
+        try {
+            ZipEntry entry = cbz.getEntry((String) mPages.get(pageNum));
+            InputStream in = null;
+            try {
+                in = cbz.getInputStream(entry);
+                bitmap = BitmapFactory.decodeStream(in);
+            } finally {
+                if (in != null) {
+                    in.close();
+                }
+            }
+        } catch (IOException e) {
+        }
+        return bitmap;
+    }
     /*public File getBitmapFile(Context context, int pageNum){
         Enumeration<? extends ZipEntry> files = cbz.entries();
         String uri = cbz.toString();
@@ -97,4 +141,4 @@ public class ReadCBZ {
         return bitmap;
 
     }*/
-}
+    }

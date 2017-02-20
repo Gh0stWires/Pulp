@@ -4,5 +4,8 @@
     <item android:id="@+id/collections"
         android:icon="@drawable/ic_menu_gallery"
         android:title="Collections"/>
+    <item android:id="@+id/all"
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="All"/>
 
 </menu>

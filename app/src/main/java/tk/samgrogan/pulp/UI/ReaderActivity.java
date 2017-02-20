@@ -12,8 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.github.junrar.rarfile.FileHeader;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +19,12 @@ import java.util.List;
 import tk.samgrogan.pulp.Data.ComicColumns;
 import tk.samgrogan.pulp.Data.ComicProvider;
 import tk.samgrogan.pulp.Data.ReadCBR;
+import tk.samgrogan.pulp.Data.ReadCBZ;
 import tk.samgrogan.pulp.R;
 
 public class ReaderActivity extends AppCompatActivity {
 
-    List<FileHeader> fileHeaderList = new ArrayList<>();
+    List fileHeaderList = new ArrayList<>();
     String mFilename;
     ViewPager mPager;
     MyPagerAdapter myPagerAdapter;
@@ -76,7 +75,7 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
-        List<FileHeader> data;
+        List data;
         String filename;
         public MyPagerAdapter(FragmentManager fm, String filename) {
             super(fm);
@@ -84,7 +83,7 @@ public class ReaderActivity extends AppCompatActivity {
             this.filename = filename;
         }
 
-        public void setData(List<FileHeader> data){
+        public void setData(List data){
             this.data = data;
         }
 
@@ -101,14 +100,24 @@ public class ReaderActivity extends AppCompatActivity {
 
     class GetBits extends AsyncTask<Integer, Object, Bitmap> {
         ReadCBR cbr;
+        ReadCBZ cbz;
         File file = new File(mFilename);
         @Override
         protected Bitmap doInBackground(Integer... params) {
-            cbr = new ReadCBR();
-            cbr.read(file.toString());
-            cbr.getCbr();
-            fileHeaderList = cbr.getPages();
-            cbr.close();
+            if(file.getName().endsWith(".cbr")) {
+                cbr = new ReadCBR();
+                cbr.read(file.toString());
+                cbr.getCbr();
+                fileHeaderList = cbr.getPages();
+                cbr.close();
+            }else {
+                cbz = new ReadCBZ();
+                cbz.read(file.toString());
+                cbz.getCbz();
+                cbz.CbzComic();
+                fileHeaderList = cbz.getPages();
+            }
+
             return null;
         }
 
