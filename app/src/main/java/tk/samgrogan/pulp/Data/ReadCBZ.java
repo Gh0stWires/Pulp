@@ -7,10 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static tk.samgrogan.pulp.Data.ReadCBR.calculateInSampleSize;
 
 /**
  * Created by ghost on 1/15/2017.
@@ -48,6 +51,7 @@ public void CbzComic() {
     while (entries.hasMoreElements()) {
         ZipEntry entry = entries.nextElement();
 
+
         mPages.add(entry.getName());
 
     }
@@ -59,21 +63,43 @@ public void CbzComic() {
 
     public Bitmap getPage(int pageNum) {
         Bitmap bitmap = null;
+        Collections.sort(mPages);
+
         try {
             ZipEntry entry = cbz.getEntry((String) mPages.get(pageNum));
             InputStream in = null;
+            BitmapFactory.Options opt = new BitmapFactory.Options();
             try {
+                opt.inJustDecodeBounds = true;
                 in = cbz.getInputStream(entry);
-                bitmap = BitmapFactory.decodeStream(in);
+                bitmap = BitmapFactory.decodeStream(in,null,opt);
             } finally {
                 if (in != null) {
                     in.close();
                 }
+
             }
+            in = null;
+
+            opt.inSampleSize = calculateInSampleSize(opt, 300, 300);
+            opt.inJustDecodeBounds = false;
+
+            try {
+                in = cbz.getInputStream(entry);
+                bitmap = BitmapFactory.decodeStream(in, null, opt);
+            }finally {
+                if (in != null){
+                    in.close();
+                }
+            }
+
+
         } catch (IOException e) {
         }
         return bitmap;
     }
+
+
     /*public File getBitmapFile(Context context, int pageNum){
         Enumeration<? extends ZipEntry> files = cbz.entries();
         String uri = cbz.toString();

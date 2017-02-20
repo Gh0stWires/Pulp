@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.github.junrar.rarfile.FileHeader;
-
 import java.io.File;
-import java.util.List;
 
 import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Data.ReadCBZ;
@@ -65,8 +62,6 @@ public class ReaderFragement extends Fragment {
                 cbr = new ReadCBR();
                 cbr.read(file.toString());
                 cbr.getCbr();
-                int pageNum = params[0];
-                List<FileHeader> fileHeaderList = cbr.getPages();
                 //for (int i = 0; i < fileHeaderList.size(); i++) {
                 //cbr.getBitmapFile(getApplicationContext(), i);
                 bitmaps = cbr.getBitmap(getContext(), page);
