@@ -3,11 +3,11 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "tk.samgrogan.pulp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -30,6 +30,7 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
+    jcenter()
 }
 
 dependencies {
@@ -38,6 +39,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.google.firebase:firebase-ads:10.0.1'
+    compile 'com.jsibbold:zoomage:1.0.0'
     compile 'com.github.junrar:junrar:0.7'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'

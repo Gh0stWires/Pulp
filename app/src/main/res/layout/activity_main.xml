@@ -26,17 +26,12 @@
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id" />
 
-
-
     <com.daprlabs.cardstack.SwipeDeck
         android:id="@+id/test_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         swipedeck:max_visible="3"
         swipedeck:render_above="false" />
-
-
-
 
 
 </com.daprlabs.cardstack.SwipeLinearLayout>

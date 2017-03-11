@@ -22,6 +22,10 @@ public class ComicColumns {
     @Unique(onConflict = ConflictResolutionType.IGNORE)
     public static final String TITLE = "title";
 
+    /*@DataType(TEXT)
+    @Unique(onConflict = ConflictResolutionType.IGNORE)
+    public static final String CACH_DIR = "cache_dir";
+*/
     @DataType(INTEGER)
     public static final String PAGE = "page";
 }

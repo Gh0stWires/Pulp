@@ -6,5 +6,5 @@
     android:id="@+id/cover_image"
     android:layout_width="match_parent"
     android:layout_height="600dp"
-    android:scaleType="fitXY"
+
     android:adjustViewBounds="true"/>

@@ -16,7 +16,7 @@ import tk.samgrogan.pulp.R;
  * Created by ghost on 2/17/2017.
  */
 
-public class ImageArrayAdapter extends ArrayAdapter<Bitmap>{
+public class ImageArrayAdapter extends ArrayAdapter<Bitmap> {
     public ImageArrayAdapter(Context context, List<Bitmap> imageUrls){
         super(context,R.layout.small_cover,imageUrls);
 
@@ -39,3 +39,4 @@ public class ImageArrayAdapter extends ArrayAdapter<Bitmap>{
         return customView;
     }
 }
+

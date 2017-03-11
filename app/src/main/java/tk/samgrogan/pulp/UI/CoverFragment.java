@@ -108,7 +108,11 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         return view;
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        //mCursor.close();
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -200,8 +204,8 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
                 if (file.getName().endsWith(".cbr")){
                     cbr.read(file.toString());
                     cbr.getCbr();
-                    //bitmaps.add(cbr.getBitmap(getApplicationContext(), 1));
-                    comics.setBitmaps(cbr.getBitmap(getContext(), 1));
+                    File cache = cbr.getBitmapFile(getContext(),1);
+                    comics.setBitmaps(cbr.getBitmap(cache));
                 }else {
                     cbz.read(file.toString());
                     cbz.getCbz();

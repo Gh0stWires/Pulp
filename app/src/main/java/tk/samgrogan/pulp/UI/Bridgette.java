@@ -15,12 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import tk.samgrogan.pulp.Data.BaseComic;
 import tk.samgrogan.pulp.Data.ComicColumns;
 import tk.samgrogan.pulp.Data.ComicProvider;
 import tk.samgrogan.pulp.Data.ReadCBR;
@@ -34,6 +36,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     GridView pages;
     ImageArrayAdapter adapter;
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+    List<BaseComic> baseComicList;
     Cursor mCursor;
 
     private static final int CURSOR_LOADER_ID = 0;
@@ -43,18 +46,26 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_bridgette, container, false);
-
-        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
-        pages = (GridView) view.findViewById(R.id.selector_grid);
-        adapter = new ImageArrayAdapter(view.getContext(), comics.getBitmaps());
+        bitmaps = comics.getBitmaps();
+        adapter = new ImageArrayAdapter(view.getContext(),bitmaps);
         new ThumbNailTask().execute();
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+
+        pages = (GridView) view.findViewById(R.id.selector_grid);
+
+        pages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
 
         return view;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(view.getContext(), ComicProvider.Comics.CONTENT_URI,new String[]{ComicColumns.TITLE, ComicColumns.PAGE},null,null,null);
+        return new CursorLoader(view.getContext(), ComicProvider.Comics.CONTENT_URI,new String[]{ComicColumns.TITLE},null,null,null);
     }
 
     @Override
@@ -67,6 +78,8 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
+
 
     public class ThumbNailTask extends AsyncTask<Object,Object,Bitmap> {
         File folder;
@@ -107,7 +120,9 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     cbr.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
                     cbr.getCbr();
                     //bitmaps.add(cbr.getBitmap(getApplicationContext(), 1));
-                    comics.setBitmaps(cbr.getBitmap(getContext(), 1));
+                    File cache = cbr.getBitmapFile(getContext(),1);
+                    comics.setBitmaps(cbr.getBitmap(cache));
+                    //baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache)));
                     cbr.close();
                 }else {
                     cbz.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
@@ -116,7 +131,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     comics.setBitmaps(cbz.getPage(1));
                 }
             }
-            mCursor.close();
+            //mCursor.close();
             return null;
         }
 
@@ -124,6 +139,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
+
             //Log.d("DB SITE", DebugDB.getAddressLog());
 
 

@@ -1,10 +1,13 @@
 package tk.samgrogan.pulp.UI;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,6 +24,11 @@ public class ReaderFragement extends Fragment {
     private int page;
     private Bitmap bitmaps;
     private ImageView imageView;
+    Matrix matrix = new Matrix();
+    float scale = 1f;
+    ScaleGestureDetector SGD;
+
+
 
     // newInstance constructor for creating fragment with arguments
     public static ReaderFragement newInstance(int page, String title) {
@@ -48,9 +56,30 @@ public class ReaderFragement extends Fragment {
         View view = inflater.inflate(R.layout.pages, container, false);
         imageView = (ImageView)view.findViewById(R.id.cover_image);
         new GetBits().execute(page);
+        SGD = new ScaleGestureDetector(view.getContext(),new ScaleListener());
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                SGD.onTouchEvent(motionEvent);
+                return true;
+            }
+        });
 
         return view;
     }
+
+    private class ScaleListener extends ScaleGestureDetector.
+            SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            scale *= detector.getScaleFactor();
+            scale = Math.max(0.1f, Math.min(scale, 50.0f));
+            matrix.setScale(scale, scale);
+            imageView.setImageMatrix(matrix);
+            return true;
+        }
+    }
+
 
     class GetBits extends AsyncTask<Integer, Object, Bitmap> {
         ReadCBR cbr;
@@ -64,7 +93,8 @@ public class ReaderFragement extends Fragment {
                 cbr.getCbr();
                 //for (int i = 0; i < fileHeaderList.size(); i++) {
                 //cbr.getBitmapFile(getApplicationContext(), i);
-                bitmaps = cbr.getBitmap(getContext(), page);
+                File cache = cbr.getBitmapFile(getContext(),page);
+                bitmaps = cbr.getBitmap(cache);
                 cbr.close();
             }else {
                 cbz = new ReadCBZ();

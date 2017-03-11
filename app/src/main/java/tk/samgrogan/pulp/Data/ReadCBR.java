@@ -112,8 +112,9 @@ public class ReadCBR {
         return c;
     }
 
-    public Bitmap getBitmap(Context context, int page){
+    public Bitmap getBitmap( File cacheBitmap){
         Bitmap bitmap = null;
+
         try{
             FileInputStream in = null;
             BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -123,7 +124,7 @@ public class ReadCBR {
 
             try {
                 opt.inJustDecodeBounds = true;
-                in = new FileInputStream(getBitmapFile(context,page));
+                in = new FileInputStream(cacheBitmap);
                 BitmapFactory.decodeStream(in, null, opt);
             }finally {
                 if (in != null){
@@ -141,7 +142,7 @@ public class ReadCBR {
 
 
             try {
-                in = new FileInputStream(getBitmapFile(context,page));
+                in = new FileInputStream(cacheBitmap);
                 bitmap = BitmapFactory.decodeStream(in, null, opt);
             } finally {
                 if (in != null){
