@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,7 @@ public class ReaderFragement extends Fragment {
         View view = inflater.inflate(R.layout.pages, container, false);
         imageView = (ImageView)view.findViewById(R.id.cover_image);
         new GetBits().execute(page);
-        SGD = new ScaleGestureDetector(view.getContext(),new ScaleListener());
+        /*SGD = new ScaleGestureDetector(view.getContext(),new ScaleListener());
         imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -64,7 +63,7 @@ public class ReaderFragement extends Fragment {
                 return true;
             }
         });
-
+*/
         return view;
     }
 
@@ -73,7 +72,7 @@ public class ReaderFragement extends Fragment {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             scale *= detector.getScaleFactor();
-            scale = Math.max(0.1f, Math.min(scale, 50.0f));
+            scale = Math.max(0.1f, Math.min(scale, 500.0f));
             matrix.setScale(scale, scale);
             imageView.setImageMatrix(matrix);
             return true;

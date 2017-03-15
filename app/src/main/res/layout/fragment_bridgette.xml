@@ -10,10 +10,10 @@
     <GridView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:numColumns="3"
-        android:choiceMode="multipleChoice"
-        android:listSelector="@drawable/comic_selector"
+        android:numColumns="auto_fit"
+        android:columnWidth="110dp"
+        android:verticalSpacing="6dp"
+        android:horizontalSpacing="6dp"
         android:id="@+id/selector_grid"/>
 
 </RelativeLayout>

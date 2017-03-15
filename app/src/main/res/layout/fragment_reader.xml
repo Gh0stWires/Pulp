@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     tools:context="tk.samgrogan.pulp.UI.ReaderFragement">
 
-    <android.support.v4.view.ViewPager
+    <tk.samgrogan.pulp.UI.ComicViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/pager"></android.support.v4.view.ViewPager>
+        android:id="@+id/pager"/>
 
 </FrameLayout>

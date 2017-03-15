@@ -137,7 +137,7 @@ public class ReadCBR {
 
             //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
 
-            opt.inSampleSize = calculateInSampleSize(opt, 300, 300);
+            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
             opt.inJustDecodeBounds = false;
 
 

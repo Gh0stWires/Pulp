@@ -81,7 +81,7 @@ public void CbzComic() {
             }
             in = null;
 
-            opt.inSampleSize = calculateInSampleSize(opt, 300, 300);
+            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
             opt.inJustDecodeBounds = false;
 
             try {

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/colorAccent" android:state_selected="true"/>
-    <item android:drawable="@color/pulp"/>
+    <item android:state_checked="true" >
+        <!-- This applies when the item is checked. -->
+        <shape android:shape="rectangle"  >
+            <solid android:color="@color/colorAccent" />
+        </shape>
+    </item>
+
+    <item>
+        <!-- This applies when the item is not checked. -->
+        <shape android:shape="rectangle"  >
+            <solid android:color="@color/pulp" />
+        </shape>
+    </item>
 
 </selector>

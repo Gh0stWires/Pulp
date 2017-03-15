@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +31,15 @@ import tk.samgrogan.pulp.Data.ReadCBZ;
 import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
 
+import static android.support.design.widget.Snackbar.make;
+
 public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     View view;
     GridView pages;
     ImageArrayAdapter adapter;
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
-    List<BaseComic> baseComicList;
+    List<BaseComic> baseComicList = new ArrayList<BaseComic>();
     Cursor mCursor;
 
     private static final int CURSOR_LOADER_ID = 0;
@@ -47,15 +50,28 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_bridgette, container, false);
         bitmaps = comics.getBitmaps();
-        adapter = new ImageArrayAdapter(view.getContext(),bitmaps);
+        adapter = new ImageArrayAdapter(view.getContext(),baseComicList);
         new ThumbNailTask().execute();
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
         pages = (GridView) view.findViewById(R.id.selector_grid);
+        pages.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 
         pages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!baseComicList.get(position).isSelected()) {
+                    baseComicList.get(position).setSelected(true);
+                    Snackbar snackbar = make(pages,R.string.selected,Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    adapter.notifyDataSetChanged();
+
+                }else {
+                    baseComicList.get(position).setSelected(false);
+                    Snackbar snackbar = make(pages,R.string.unselected,Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    adapter.notifyDataSetChanged();
+                }
 
             }
         });
@@ -121,6 +137,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     cbr.getCbr();
                     //bitmaps.add(cbr.getBitmap(getApplicationContext(), 1));
                     File cache = cbr.getBitmapFile(getContext(),1);
+                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache),false));
                     comics.setBitmaps(cbr.getBitmap(cache));
                     //baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache)));
                     cbr.close();
@@ -128,6 +145,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     cbz.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
                     cbz.getCbz();
                     cbz.CbzComic();
+                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbz.getPage(1),false));
                     comics.setBitmaps(cbz.getPage(1));
                 }
             }
