@@ -13,4 +13,5 @@ public class ComicDB {
     public static final int VERSION = 1;
 
     @Table(ComicColumns.class) public static final String COMICS = "comics";
+    //@Table(ComicColumns.class) public static final String COMICS = "comics";
 }

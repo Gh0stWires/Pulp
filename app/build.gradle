@@ -30,21 +30,26 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
     jcenter()
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.google.firebase:firebase-ads:10.0.1'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.google.firebase:firebase-ads:10.2.0'
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.5'
     compile 'com.github.junrar:junrar:0.7'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.firebaseui:firebase-ui-auth:1.2.0'
+    compile 'com.android.support:recyclerview-v7:25.3.0'
+    compile 'com.android.support:support-v4:25.3.0'
     compile 'com.daprlabs.aaron:cardstack:0.3.1-beta0'
-    apt 'net.simonvt.schematic:schematic-compiler:0.6.3'
     compile 'net.simonvt.schematic:schematic:0.6.3'
+    compile 'com.google.firebase:firebase-auth:10.2.0'
     testCompile 'junit:junit:4.12'
+    apt 'net.simonvt.schematic:schematic-compiler:0.6.3'
+    debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

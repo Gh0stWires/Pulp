@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "376546302947",
+    "firebase_url": "https://pulp-153122.firebaseio.com",
+    "project_id": "pulp-153122",
+    "storage_bucket": "pulp-153122.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376546302947:android:83a995348aa3c0a6",
+        "android_client_info": {
+          "package_name": "tk.samgrogan.pulp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376546302947-derl4lj8o6182ok5n461ucp23nek9e78.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "376546302947-ca0qv4h0cbo5tlv4n5bbfldrqsj5j9es.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tk.samgrogan.pulp",
+            "certificate_hash": "d29dbd137ff48270ad4e13b8e090a7a4bf8fd95e"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAixgcnZph9kx8uCmSG2BVx38Af15UbJmY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376546302947-derl4lj8o6182ok5n461ucp23nek9e78.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
