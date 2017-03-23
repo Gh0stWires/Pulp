@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import tk.samgrogan.pulp.R;
 
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CoverFragment coverFragment;
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     private static final int RC_SIGN_IN = 123;
 
 
@@ -39,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToggle.syncState();
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference().child("users").child("user_id").child("collections");
+        databaseReference.push().setValue("superman");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -94,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             coverFragment = new CoverFragment();
             android.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, coverFragment).commit();
+        }else if (id == R.id.short_boxes){
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
