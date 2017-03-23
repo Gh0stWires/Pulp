@@ -11,18 +11,7 @@
             android:title="Long Box" />
 
 
-
-    <item android:id="@+id/short_boxes"
-        android:title="Short Boxes">
-
-        <menu>
-
-        </menu>
-
-    </item>
     </group>
-
-
 
 
 

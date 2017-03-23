@@ -8,26 +8,39 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import tk.samgrogan.pulp.Models.ComicDataObject;
 import tk.samgrogan.pulp.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout mDrawer;
     ActionBarDrawerToggle mToggle;
+    Menu mBoxList;
+    SubMenu subMenu;
     Toolbar toolbar;
     CoverFragment coverFragment;
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
+    ChildEventListener childEventListener;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+    List<String> testList = new ArrayList<>();
     private static final int RC_SIGN_IN = 123;
 
 
@@ -37,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cover_fragment);
 
+        testList.add("AC1");
+        testList.add("AC2");
+        testList.add("AC3");
+
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle( this, mDrawer,  R.string.open, R.string.close);
         mDrawer.addDrawerListener(mToggle);
@@ -44,13 +61,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("users").child("user_id").child("collections");
-        databaseReference.push().setValue("superman");
+        if (firebaseAuth.getCurrentUser() != null) {
+            databaseReference = firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("collections");
+        }
+        //ComicDataObject test = new ComicDataObject("Superman",testList);
+        //databaseReference.push().setValue(test);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nvView);
         navigationView.setNavigationItemSelectedListener(this);
+        mBoxList = navigationView.getMenu();
+        subMenu = mBoxList.addSubMenu("Short Boxes");
+
 
         coverFragment = new CoverFragment();
         android.app.FragmentManager fragmentManager = getFragmentManager();
@@ -61,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
-
                 }else {
                     startActivityForResult(
                             AuthUI.getInstance()
@@ -75,6 +97,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         };
+
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                ComicDataObject dataObject = dataSnapshot.getValue(ComicDataObject.class);
+                subMenu.add(dataObject.collectionTitle);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        if (firebaseAuth.getCurrentUser() != null){
+            databaseReference.addChildEventListener(childEventListener);
+        }
+
+
 
     }
 
@@ -101,9 +158,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             coverFragment = new CoverFragment();
             android.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, coverFragment).commit();
-        }else if (id == R.id.short_boxes){
-
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -114,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         firebaseAuth.addAuthStateListener(authStateListener);
+        //databaseReference.addChildEventListener(childEventListener);
     }
 
     @Override

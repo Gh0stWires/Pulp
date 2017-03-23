@@ -1,9 +1,11 @@
 package tk.samgrogan.pulp.UI;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,10 +16,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,6 +38,7 @@ import tk.samgrogan.pulp.Data.ComicColumns;
 import tk.samgrogan.pulp.Data.ComicProvider;
 import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Data.ReadCBZ;
+import tk.samgrogan.pulp.Models.ComicDataObject;
 import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
 
@@ -40,7 +51,12 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     ImageArrayAdapter adapter;
     List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     List<BaseComic> baseComicList = new ArrayList<BaseComic>();
+    List<String> pathList = new ArrayList<>();
+    String boxName;
     Cursor mCursor;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    FirebaseAuth firebaseAuth;
 
     private static final int CURSOR_LOADER_ID = 0;
     Comics comics = new Comics();
@@ -49,6 +65,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_bridgette, container, false);
+        setHasOptionsMenu(true);
         bitmaps = comics.getBitmaps();
         adapter = new ImageArrayAdapter(view.getContext(),baseComicList);
         new ThumbNailTask().execute();
@@ -57,6 +74,10 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         pages = (GridView) view.findViewById(R.id.selector_grid);
         pages.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("collections");
+
         pages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -64,12 +85,14 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     baseComicList.get(position).setSelected(true);
                     Snackbar snackbar = make(pages,R.string.selected,Snackbar.LENGTH_LONG);
                     snackbar.show();
+                    pathList.add(baseComicList.get(position).getTitle());
                     adapter.notifyDataSetChanged();
 
                 }else {
                     baseComicList.get(position).setSelected(false);
                     Snackbar snackbar = make(pages,R.string.unselected,Snackbar.LENGTH_LONG);
                     snackbar.show();
+                    pathList.remove(position);
                     adapter.notifyDataSetChanged();
                 }
 
@@ -77,6 +100,55 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         });
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.short_box_creation_tools, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_to_box:
+                showDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void showDialog(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+
+        alert.setTitle("Give your box a name");
+        alert.setMessage("Give your box a name");
+
+        final EditText input = new EditText(view.getContext());
+        alert.setView(input);
+
+        alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boxName = input.getText().toString();
+                pushData();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+    }
+
+    public void pushData(){
+        ComicDataObject dataObject = new ComicDataObject(boxName,pathList);
+        databaseReference.push().setValue(dataObject);
     }
 
     @Override
