@@ -2,11 +2,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
-    android:layout_height="wrap_content"
+    android:layout_height="?attr/actionBarSize"
+    app:titleTextColor="@color/pulp"
+    android:titleTextColor="@color/pulp"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:elevation="4dp"
     android:fitsSystemWindows="true"
     android:minHeight="?attr/actionBarSize"
-    app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    android:background="@color/colorPrimary">
+    app:theme="@style/AppTheme"
+    android:theme="@style/AppTheme"
+    app:popupTheme="@style/AppTheme">
 </android.support.v7.widget.Toolbar>
 
