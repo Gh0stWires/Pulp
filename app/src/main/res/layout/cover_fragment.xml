@@ -1,11 +1,11 @@
 <RelativeLayout android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include layout="@layout/app_bar" />
 
     <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,18 +29,47 @@
 
         <!-- The navigation drawer that comes from the left -->
         <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/nvView"
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nvStatic"
             android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:layout_marginTop="?attr/actionBarSize"
             android:background="@color/pulp"
-            android:isScrollContainer="true">
+            app:menu="@menu/nav_drawer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="120dp"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginStart="6dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="Short Boxes"
+                    android:textSize="18sp" />
 
 
-        </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/nvView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/pulp"
+                    android:isScrollContainer="true">
+
+
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </android.support.design.widget.NavigationView>
 
     </android.support.v4.widget.DrawerLayout>
 </RelativeLayout>

@@ -60,7 +60,6 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         view = inflater.inflate(R.layout.activity_main, container, false);
         bitmaps = comics.getBitmaps();
 
-
         ActivityCompat.requestPermissions(getActivity(),
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
