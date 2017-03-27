@@ -1,5 +1,7 @@
 package tk.samgrogan.pulp.UI;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -16,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ChildEventListener childEventListener;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+    DrawerAdapter adapter;
     List<DrawerItem> testList = new ArrayList<>();
     List<ComicDataObject> collectionList = new ArrayList<>();
     private static final int RC_SIGN_IN = 123;
@@ -55,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
         setContentView(R.layout.cover_fragment);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navRecycler = (RecyclerView)findViewById(R.id.nvView);
@@ -83,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        final DrawerAdapter adapter = new DrawerAdapter(testList);
+        adapter = new DrawerAdapter(testList);
         navRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
 
@@ -183,6 +190,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    coverFragment = new CoverFragment();
+                    android.app.FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, coverFragment).commit();
+                    navRecycler.setAdapter(adapter);
+
+
+                } else {
+
+                    Toast.makeText(this, R.string.permission_toast, Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override

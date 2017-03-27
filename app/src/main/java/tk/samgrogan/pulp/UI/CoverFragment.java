@@ -1,25 +1,21 @@
 package tk.samgrogan.pulp.UI;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.google.android.gms.ads.AdRequest;
@@ -60,9 +56,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         view = inflater.inflate(R.layout.activity_main, container, false);
         bitmaps = comics.getBitmaps();
 
-        ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1);
+
         MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
 
         AdView mAdView = (AdView) view.findViewById(R.id.adView);
@@ -71,7 +65,9 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         adapter = new SwipeDeckAdapter(bitmaps, view.getContext());
 
         new ThumbNailTask().execute();
+
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+
 
         pages = (SwipeDeck) view.findViewById(R.id.test_list);
         pages.setEventCallback(new SwipeDeck.SwipeEventCallback() {
@@ -113,31 +109,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         //mCursor.close();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
 
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    new ThumbNailTask().execute();
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(getActivity(), "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

@@ -28,7 +28,7 @@ android:paddingRight="16dp">
             android:layout_height="wrap_content"
             android:paddingRight="10sp"
             android:paddingEnd="10sp"
-            android:text="You are on Page:"
+            android:text="@string/you_are_on_page"
             android:textColor="@color/bel_grey_text"/>
         <TextView
             android:id="@+id/page_num"

@@ -122,13 +122,13 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     public void showDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
 
-        alert.setTitle("Give your box a name");
-        alert.setMessage("Give your box a name");
+        alert.setTitle(R.string.dialog_title);
+        alert.setMessage(R.string.dialog_message);
 
         final EditText input = new EditText(view.getContext());
         alert.setView(input);
 
-        alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(R.string.pos_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 boxName = input.getText().toString();
@@ -136,7 +136,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.neg_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

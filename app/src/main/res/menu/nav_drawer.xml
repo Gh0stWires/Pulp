@@ -4,11 +4,11 @@
         <item
             android:id="@+id/collections"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Make a Short Box" />
+            android:title="@string/make_a_short_box" />
         <item
             android:id="@+id/all"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Long Box" />
+            android:title="@string/long_box" />
 
 
     </group>

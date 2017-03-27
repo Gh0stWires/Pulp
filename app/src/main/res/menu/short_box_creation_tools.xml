@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/add_to_box"
-        android:title="Add"
+        android:title="@string/add"
         android:icon="@drawable/ic_create_black_24dp"
         app:showAsAction="ifRoom"/>
 

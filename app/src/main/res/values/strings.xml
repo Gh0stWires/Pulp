@@ -32,5 +32,15 @@
     <string name="password_hint">Password</string>
     <string name="log_in_string">Log In</string>
     <string name="or_descriptor">or</string>
+    <string name="short_boxes">Short Boxes</string>
+    <string name="you_are_on_page">You are on Page:</string>
+    <string name="make_a_short_box">Make a Short Box</string>
+    <string name="long_box">Long Box</string>
+    <string name="add">Add</string>
+    <string name="permission_toast">Permission denied to read your External storage</string>
+    <string name="dialog_message">You know so you can find it and stuff..</string>
+    <string name="dialog_title">Give your box a name</string>
+    <string name="pos_button">Create</string>
+    <string name="neg_button">Cancel</string>
 
 </resources>

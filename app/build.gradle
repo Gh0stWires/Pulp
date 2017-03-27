@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'Master'
+            storeFile file("$rootDir/keystore.jks")
+            storePassword 'Master'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
-
     defaultConfig {
         applicationId "tk.samgrogan.pulp"
         minSdkVersion 21
@@ -16,6 +23,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            multiDexEnabled true
         }
     }
     packagingOptions {
