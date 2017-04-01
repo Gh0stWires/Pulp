@@ -1,9 +1,44 @@
 # Pulp
-To test this app out you'll need to create a Comics folder inside your Downloads directory and put atleast 1 cbr file in the Comics directory. 
-As of right now it only reads cbr files.
+Pulp is a comic book reader for android. It can read CBZ and CBR comic files. I created Pulp because I wanted reading digital comic books to feel the same way as reading real ones. I definately learned a lot about dealing with compressed archives and bitmaps in this project.
 
-![demo](Screenshots/Nexus_5X_Recording_20161105_1.gif)
+# UI
+![demo](Screenshots/GZYEAJ.gif)                                                                
+                                To create the feeling
+                                of handleing a real comic
+                                I decided to make the cover
+                                of the comics a swipable
+                                object. To achieve this
+                                I used [Swipe-Deck](https://github.com/aaronbond/Swipe-Deck)
 
 
 
-<img src="Screenshots/Screenshot_20161118-153016.png" width="480" height="840" />
+
+
+
+![demo](Screenshots/9B7xCr.gif)                               
+                                Swiping the Comic left goes
+                                to the next one in the stack 
+                                but swiping right opens the comic 
+                                up so you can read it.
+                                
+# Firebase and Collections                                
+![demo](Screenshots/YS6Qhk.gif)
+                                The user can make there own
+                                lists of comics. this prevents
+                                the user from having to swipe
+                                through a large list of comics
+                                just to find the one they want 
+                                to read. I use firebase to store 
+                                these lists for each user. That way 
+                                if the user switches devices they
+                                can still access there collections.
+                              
+# Thoughts
+The hardest part of this project was dealing with RAR archives. When it comes to Java the only thing out there is junrar. Junrar has no documentation so I had to read through the source to piece together how to use it. But once I got it working it did the job.
+
+# Libraries Used
+- [Swipe-Deck](https://github.com/aaronbond/Swipe-Deck)
+- [Firebase Auth](https://firebase.google.com/docs/auth/)
+- [Firebase Database](https://firebase.google.com/docs/database/)
+- [Junrar](https://github.com/edmund-wagner/junrar)
+
