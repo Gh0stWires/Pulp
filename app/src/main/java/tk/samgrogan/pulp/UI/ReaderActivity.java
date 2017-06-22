@@ -5,12 +5,22 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,13 +32,16 @@ import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Data.ReadCBZ;
 import tk.samgrogan.pulp.R;
 
-public class ReaderActivity extends AppCompatActivity {
+public class ReaderActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener, GoogleApiClient.OnConnectionFailedListener {
 
     List fileHeaderList = new ArrayList<>();
     String mFilename;
     ViewPager mPager;
     MyPagerAdapter myPagerAdapter;
     Cursor mCursor;
+    GoogleApiClient mWear;
+
+    private static final String NEXT_MESSAGE = "/next";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +59,8 @@ public class ReaderActivity extends AppCompatActivity {
         new GetBits().execute();
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFilename);
         mPager.setOffscreenPageLimit(3);
+
+        mWear = new GoogleApiClient.Builder(this).addApi(Wearable.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 
         mCursor = getContentResolver().query(ComicProvider.Comics.CONTENT_URI,
                 new String[]{ComicColumns.PAGE}, ComicColumns.TITLE + "= ?",
@@ -72,6 +87,49 @@ public class ReaderActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    public int getItem(int item){
+        return mPager.getCurrentItem() + item;
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d("Wear","Connected");
+        Wearable.MessageApi.addListener(mWear,this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("Wear","Suspended");
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        Log.d("Wear","Got Message");
+        if (messageEvent.getPath().equals(NEXT_MESSAGE)){
+            mPager.setCurrentItem(getItem(1));
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("Wear","Failed");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWear.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWear.disconnect();
+        Wearable.MessageApi.removeListener(mWear, this);
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
@@ -139,4 +197,6 @@ public class ReaderActivity extends AppCompatActivity {
 
         }
     }
+
+
 }

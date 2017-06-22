@@ -3,6 +3,7 @@ package tk.samgrogan.pulp.UI;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -44,6 +45,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
     SwipeDeckAdapter adapter;
     SwipeDeck pages;
     Cursor mCursor;
+    Context mContext;
 
     private static final int CURSOR_LOADER_ID = 0;
     Comics comics = new Comics();
@@ -55,6 +57,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_main, container, false);
         bitmaps = comics.getBitmaps();
+        mContext = view.getContext();
 
 
         MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
@@ -64,9 +67,8 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         mAdView.loadAd(adRequest);
         adapter = new SwipeDeckAdapter(bitmaps, view.getContext());
 
-        new ThumbNailTask().execute();
-
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        new ThumbNailTask().execute();
 
 
         pages = (SwipeDeck) view.findViewById(R.id.test_list);
@@ -135,6 +137,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         ReadCBR cbr;
         ReadCBZ cbz;
         List<File> files = new ArrayList<>();
+        ContentValues mNewValues = new ContentValues();
 
         private void checkFiles(File dir, List<File> files) {
             String extensionOne = ".cbr";
@@ -160,7 +163,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         protected Bitmap doInBackground(Object... params) {
             cbr = new ReadCBR();
             cbz = new ReadCBZ();
-            ContentValues mNewValues = new ContentValues();
+            //mNewValues = new ContentValues();
             folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
             Log.d("path", folder.toString());
             checkFiles(folder,files);
@@ -170,12 +173,12 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
                 File file = files.get(i);
                 comics.setFilenames(file);
                 mNewValues.put(ComicColumns.TITLE, file.toString());
-                getActivity().getContentResolver().insert(ComicProvider.Comics.CONTENT_URI, mNewValues);
+                mContext.getContentResolver().insert(ComicProvider.Comics.CONTENT_URI, mNewValues);
 
                 if (file.getName().endsWith(".cbr")){
                     cbr.read(file.toString());
                     cbr.getCbr();
-                    File cache = cbr.getBitmapFile(getContext(),1);
+                    File cache = cbr.getBitmapFile(mContext,1);
                     comics.setBitmaps(cbr.getBitmap(cache));
                 }else {
                     cbz.read(file.toString());

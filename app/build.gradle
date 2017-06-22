@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId "tk.samgrogan.pulp"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -40,6 +40,7 @@ android {
 repositories {
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "http://dl.bintray.com/raffaeu/maven" }
     jcenter()
 }
 
@@ -47,16 +48,20 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'
-    compile 'com.google.firebase:firebase-ads:10.2.0'
+    wearApp project(':pulpremote')
+    compile 'com.google.firebase:firebase-ads:10.2.6'
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:2.2.5'
     compile 'com.github.junrar:junrar:0.7'
+    compile 'com.mariux.teleport.lib:teleportlib:0.1.9'
+    compile 'com.google.android.gms:play-services-wearable:10.2.6'
+    compile 'com.google.android.support:wearable:2.0.2'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
     compile 'com.android.support:recyclerview-v7:25.3.0'
     compile 'com.android.support:support-v4:25.3.0'
-    compile 'com.google.firebase:firebase-database:10.2.0'
+    compile 'com.google.firebase:firebase-database:10.2.6'
     compile 'com.daprlabs.aaron:cardstack:0.3.1-beta0'
     compile 'net.simonvt.schematic:schematic:0.6.3'
-    compile 'com.google.firebase:firebase-auth:10.2.0'
+    compile 'com.google.firebase:firebase-auth:10.2.6'
     testCompile 'junit:junit:4.12'
     apt 'net.simonvt.schematic:schematic-compiler:0.6.3'
     debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
