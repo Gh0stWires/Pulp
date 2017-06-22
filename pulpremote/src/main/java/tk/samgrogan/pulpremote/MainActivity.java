@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.CapabilityApi;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.Set;
@@ -42,7 +43,9 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 mNextButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Wearable.MessageApi.sendMessage(mApiClient, nodeId, "/next", null);
+                        PutDataRequest request = PutDataRequest.create("/next");
+                        Wearable.DataApi.putDataItem(mApiClient, request);
+                        Wearable.DataApi.deleteDataItems(mApiClient,request.getUri());
                     }
                 });
             }
@@ -53,6 +56,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             @Override
             public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
                 updateCapability(capabilityInfo);
+                Log.d("Wear Cap", "It was called");
             }
         };
 
@@ -87,10 +91,12 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
         Set<Node> nodes = info.getNodes();
         nodeId = pickBestNodeId(nodes);
+        Log.d("Wear Cap", "It was called, Duuude");
     }
 
     private String pickBestNodeId(Set<Node> nodes) {
         String bestNodeId = null;
+        Log.d("Wear Cap", "yep this too");
         // Find a nearby node or pick one arbitrarily
         for (Node node : nodes) {
             if (node.isNearby()) {

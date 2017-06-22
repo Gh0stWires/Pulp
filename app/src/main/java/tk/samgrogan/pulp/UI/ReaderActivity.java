@@ -15,11 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.Wearable;
 
 import java.io.File;
@@ -32,7 +33,7 @@ import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Data.ReadCBZ;
 import tk.samgrogan.pulp.R;
 
-public class ReaderActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener, GoogleApiClient.OnConnectionFailedListener {
+public class ReaderActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, DataApi.DataListener, GoogleApiClient.OnConnectionFailedListener {
 
     List fileHeaderList = new ArrayList<>();
     String mFilename;
@@ -98,7 +99,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d("Wear","Connected");
-        Wearable.MessageApi.addListener(mWear,this);
+        Wearable.DataApi.addListener(mWear,this);
     }
 
     @Override
@@ -106,13 +107,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
         Log.d("Wear","Suspended");
     }
 
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d("Wear","Got Message");
-        if (messageEvent.getPath().equals(NEXT_MESSAGE)){
-            mPager.setCurrentItem(getItem(1));
-        }
-    }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -129,7 +124,20 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
     protected void onPause() {
         super.onPause();
         mWear.disconnect();
-        Wearable.MessageApi.removeListener(mWear, this);
+        Wearable.DataApi.removeListener(mWear, this);
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        for (DataEvent event : dataEventBuffer){
+            if (event.getType() == DataEvent.TYPE_CHANGED){
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().equals(NEXT_MESSAGE)){
+                    Log.d("Wear","Got Message");
+                    mPager.setCurrentItem(getItem(1));
+                }
+            }
+        }
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
