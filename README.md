@@ -35,7 +35,7 @@ Pulp is a comic book reader for android. It can read CBZ and CBR comic files. I 
  
  # Update
  
- I add the ability to turn pages using an app on an android wear watch.
+ I added the ability to turn pages using an app on an android wear watch.
                               
 # Thoughts
 The hardest part of this project was dealing with RAR archives. When it comes to Java the only thing out there is junrar. Junrar has no documentation so I had to read through the source to piece together how to use it. But once I got it working it did the job.
