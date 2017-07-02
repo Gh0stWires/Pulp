@@ -38,6 +38,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
     List fileHeaderList = new ArrayList<>();
     String mFilename;
     ViewPager mPager;
+
     MyPagerAdapter myPagerAdapter;
     Cursor mCursor;
     GoogleApiClient mWear;
