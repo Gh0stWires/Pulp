@@ -26,6 +26,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     private TextView mTextView;
     private Button mNextButton;
+    private Button mPrevButton;
     private GoogleApiClient mApiClient;
     private static final String node = "turn_page";
     private String nodeId = null;
@@ -40,10 +41,19 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
                 mNextButton = (Button) findViewById(R.id.next);
+                mPrevButton = (Button) findViewById(R.id.back);
                 mNextButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         PutDataRequest request = PutDataRequest.create("/next");
+                        Wearable.DataApi.putDataItem(mApiClient, request);
+                        Wearable.DataApi.deleteDataItems(mApiClient,request.getUri());
+                    }
+                });
+                mPrevButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PutDataRequest request = PutDataRequest.create("/back");
                         Wearable.DataApi.putDataItem(mApiClient, request);
                         Wearable.DataApi.deleteDataItems(mApiClient,request.getUri());
                     }

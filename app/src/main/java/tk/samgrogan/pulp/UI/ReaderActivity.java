@@ -43,6 +43,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
     GoogleApiClient mWear;
 
     private static final String NEXT_MESSAGE = "/next";
+    private static final String BACK_MESSAGE = "/back";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +93,12 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
 
     }
 
-    public int getItem(int item){
+    public int getNextItem(int item){
         return mPager.getCurrentItem() + item;
+    }
+
+    public int getPreviousItem(int item){
+        return mPager.getCurrentItem() - item;
     }
 
     @Override
@@ -134,7 +139,9 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().equals(NEXT_MESSAGE)){
                     Log.d("Wear","Got Message");
-                    mPager.setCurrentItem(getItem(1));
+                    mPager.setCurrentItem(getNextItem(1));
+                }else if (item.getUri().getPath().equals(BACK_MESSAGE)){
+                    mPager.setCurrentItem(getPreviousItem(1));
                 }
             }
         }
