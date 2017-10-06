@@ -30,9 +30,9 @@ public class Comics implements Serializable{
         return this.bitmaps;
     }
 
-    public void setBitmapList(List<Bitmap> bitmapList){
-        this.bitmaps = bitmapList;
-    }
+    //public void setBitmapList(List<Bitmap> bitmapList){
+        //this.bitmaps = bitmapList;
+    //}
 
     public void setFilenames(File filename) {
         this.filenames.add(filename);

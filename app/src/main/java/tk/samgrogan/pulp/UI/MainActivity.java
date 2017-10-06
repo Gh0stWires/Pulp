@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 1);
         setContentView(R.layout.cover_fragment);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -117,9 +117,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        coverFragment = new CoverFragment();
+        /*coverFragment = new CoverFragment();
         android.app.FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, coverFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, coverFragment).commit();*/
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override

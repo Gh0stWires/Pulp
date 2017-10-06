@@ -23,6 +23,10 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,6 +160,25 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
             }
         }
 
+        private File moveFile(File file, File dir) throws IOException {
+            File newFile = new File(dir, file.getName());
+            FileChannel outputChannel = null;
+            FileChannel inputChannel = null;
+            try {
+                outputChannel = new FileOutputStream(newFile).getChannel();
+                inputChannel = new FileInputStream(file).getChannel();
+                inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+                inputChannel.close();
+                file.delete();
+            } finally {
+                if (inputChannel != null) inputChannel.close();
+                if (outputChannel != null) outputChannel.close();
+            }
+
+            return newFile;
+
+        }
+
         @Override
         protected Bitmap doInBackground(Object... params) {
             cbr = new ReadCBR();
@@ -165,8 +188,29 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
             Log.d("path", folder.toString());
             checkFiles(folder,files);
             Log.d("files",files.toString());
+            File comicFolder = new File(Environment.getExternalStorageDirectory() + "/Comics");
+            boolean test = true;
+            if (!comicFolder.exists()){
+                test = comicFolder.mkdir();
+            }
+            if (test){
+                Log.d("Folder Made:", comicFolder.toString());
+            }else {
+                Log.d("Error", "Failed to create directory");
+            }
             for (int i = 0; i < files.size(); i++){
                 //
+                /*File file = null;
+
+                try {
+                    if (!files.get(i).getPath().contains(Environment.getExternalStorageDirectory() + "/Comics")) {
+                        file = moveFile(files.get(i), comicFolder);
+                    }else {
+                        file = files.get(i);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
                 File file = files.get(i);
                 comics.setFilenames(file);
                 mNewValues.put(ComicColumns.TITLE, file.toString());
