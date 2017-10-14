@@ -109,17 +109,22 @@ public class ShortBoxFragment extends Fragment {
             for (int i = 0; i < firePaths.size(); i++){
                 //
                 String file = firePaths.get(i);
-
-                if (file.endsWith(".cbr")){
-                    cbr.read(file);
-                    cbr.getCbr();
-                    File cache = cbr.getBitmapFile(getContext(),1);
-                    comics.setBitmaps(cbr.getBitmap(cache));
+                File check = new File(file);
+                if (!check.exists()){
+                    firePaths.remove(i);
                 }else {
-                    cbz.read(file);
-                    cbz.getCbz();
-                    cbz.CbzComic();
-                    comics.setBitmaps(cbz.getPage(1));
+
+                    if (file.endsWith(".cbr")) {
+                        cbr.read(file);
+                        cbr.getCbr();
+                        File cache = cbr.getBitmapFile(getContext(), 1);
+                        comics.setBitmaps(cbr.getBitmap(cache));
+                    } else {
+                        cbz.read(file);
+                        cbz.getCbz();
+                        cbz.CbzComic();
+                        comics.setBitmaps(cbz.getPage(1));
+                    }
                 }
 
                 cbr.close();
