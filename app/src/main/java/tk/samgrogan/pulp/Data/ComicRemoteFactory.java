@@ -11,9 +11,9 @@ import tk.samgrogan.pulp.R;
 /**
  * Created by ghost on 2/2/2017.
  */
-public class ComicRemoteFactory implements RemoteViewsService.RemoteViewsFactory {
-    Context mContext;
-    Cursor mCursor = null;
+class ComicRemoteFactory implements RemoteViewsService.RemoteViewsFactory {
+    private Context mContext;
+    private Cursor mCursor = null;
 
     public ComicRemoteFactory(Context context) {
         mContext = context;

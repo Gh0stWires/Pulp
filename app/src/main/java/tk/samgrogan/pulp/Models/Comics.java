@@ -2,21 +2,21 @@ package tk.samgrogan.pulp.Models;
 
 import android.graphics.Bitmap;
 
-import com.github.junrar.rarfile.FileHeader;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import junrar.rarfile.FileHeader;
 
 /**
  * Created by gh0st on 3/6/16.
  */
 public class Comics implements Serializable{
 
-    transient List<FileHeader> pageHeaders;
-    List<File> filenames = new ArrayList<File>();
-    public List<Bitmap> bitmaps = new ArrayList<>();
+    private transient List<FileHeader> pageHeaders;
+    private List<File> filenames = new ArrayList<File>();
+    private List<Bitmap> bitmaps = new ArrayList<>();
 
     public Comics(){
 

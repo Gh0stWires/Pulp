@@ -23,8 +23,8 @@ public class ReaderFragement extends Fragment {
     private int page;
     private Bitmap bitmaps;
     private ImageView imageView;
-    Matrix matrix = new Matrix();
-    float scale = 1f;
+    private Matrix matrix = new Matrix();
+    private float scale = 1f;
     ScaleGestureDetector SGD;
 
 

@@ -7,7 +7,7 @@ import net.simonvt.schematic.annotation.Table;
  * Created by ghost on 11/25/2016.
  */
 @Database(version = ComicDB.VERSION)
-public class ComicDB {
+class ComicDB {
     private ComicDB(){}
 
     public static final int VERSION = 1;

@@ -86,10 +86,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         mApiClient.connect();
     }
 
-    public void changePage(View view){
-
-    }
-
     public void getHost(){
 
         CapabilityApi.GetCapabilityResult result = Wearable.CapabilityApi.getCapability(mApiClient, node,
@@ -97,7 +93,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         updateCapability(result.getCapability());
     }
 
-    public void updateCapability(CapabilityInfo info){
+    private void updateCapability(CapabilityInfo info){
 
         Set<Node> nodes = info.getNodes();
         nodeId = pickBestNodeId(nodes);

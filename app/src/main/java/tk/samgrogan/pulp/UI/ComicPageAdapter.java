@@ -16,7 +16,7 @@ import tk.samgrogan.pulp.R;
  * Created by ghost on 11/14/2016.
  */
 
-public class ComicPageAdapter extends PagerAdapter {
+class ComicPageAdapter extends PagerAdapter {
     private List<Bitmap> data;
     private Context context;
 

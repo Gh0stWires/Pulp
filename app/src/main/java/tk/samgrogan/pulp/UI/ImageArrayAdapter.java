@@ -16,7 +16,7 @@ import tk.samgrogan.pulp.R;
  * Created by ghost on 2/17/2017.
  */
 
-public class ImageArrayAdapter extends ArrayAdapter<BaseComic> {
+class ImageArrayAdapter extends ArrayAdapter<BaseComic> {
     public ImageArrayAdapter(Context context, List<BaseComic> imageUrls){
         super(context,R.layout.small_cover,imageUrls);
 

@@ -24,7 +24,7 @@ public class DrawerItem {
         return mIcon;
     }
 
-    public void setmIcon(int mIcon) {
-        this.mIcon = mIcon;
+    public void setmIcon() {
+        this.mIcon = tk.samgrogan.pulp.R.drawable.ic_menu_slideshow;
     }
 }

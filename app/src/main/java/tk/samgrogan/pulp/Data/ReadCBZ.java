@@ -13,17 +13,15 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static tk.samgrogan.pulp.Data.ReadCBR.calculateInSampleSize;
-
 /**
  * Created by ghost on 1/15/2017.
  */
 
 public class ReadCBZ {
 
-    String mFileName;
+    private String mFileName;
     ZipFile cbz;
-    ArrayList mPages;
+    private ArrayList mPages;
 
 
     public ReadCBZ(){}
@@ -41,22 +39,22 @@ public class ReadCBZ {
 
         return cbz;
     }
-//TODO
-public void CbzComic() {
+    //TODO
+    public void CbzComic() {
 
-    // populate mPages with the names of all the ZipEntries
-    //cbz = new ZipFile(mFileName);
-    mPages = new ArrayList<String>();
-    Enumeration<? extends ZipEntry> entries = cbz.entries();
-    while (entries.hasMoreElements()) {
-        ZipEntry entry = entries.nextElement();
+        // populate mPages with the names of all the ZipEntries
+        //cbz = new ZipFile(mFileName);
+        mPages = new ArrayList<String>();
+        Enumeration<? extends ZipEntry> entries = cbz.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = entries.nextElement();
 
 
-        mPages.add(entry.getName());
+            mPages.add(entry.getName());
+
+        }
 
     }
-
-}
     public List getPages(){
         return mPages;
     }
@@ -81,7 +79,7 @@ public void CbzComic() {
             }
             in = null;
 
-            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
+            //opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
             opt.inJustDecodeBounds = false;
 
             try {

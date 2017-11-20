@@ -6,29 +6,27 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
-import com.github.junrar.Archive;
-import com.github.junrar.exception.RarException;
-import com.github.junrar.rarfile.FileHeader;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import junrar.Archive;
+import junrar.exception.RarException;
+import junrar.rarfile.FileHeader;
 
 /**
  * Created by gh0st on 2/25/16.
  */
 public class ReadCBR {
 
-    String mFileName;
-    List<FileHeader> mPages;
-    Archive cbr;
-
+    private String mFileName;
+    private List<FileHeader> mPages;
+    private Archive cbr;
     public ReadCBR(){
 
     }
@@ -60,7 +58,7 @@ public class ReadCBR {
         return cbr;
     }
 
-    public List<FileHeader> getHeaders(){
+    private List<FileHeader> getHeaders(){
         List<FileHeader> fileHeaders = cbr.getFileHeaders();
         Collections.sort(fileHeaders, new Comp());
         return fileHeaders;
@@ -68,21 +66,21 @@ public class ReadCBR {
 
 
     public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            BitmapFactory.Options options) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
 
-        if (height > reqHeight || width > reqWidth) {
+        if (height > 600 || width > 600) {
 
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
 
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) > 600
+                    && (halfWidth / inSampleSize) > 600) {
                 inSampleSize *= 2;
             }
         }
@@ -137,7 +135,7 @@ public class ReadCBR {
 
             //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
 
-            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
+            opt.inSampleSize = calculateInSampleSize(opt);
             opt.inJustDecodeBounds = false;
 
 
@@ -159,58 +157,13 @@ public class ReadCBR {
 
     }
 
-    public Bitmap getPage(int pageNum, int maxLength){
-        Bitmap bitmap = null;
-        try{
-            InputStream in = null;
-            BitmapFactory.Options opt = new BitmapFactory.Options();
-            List<FileHeader> files = getHeaders();
 
-            try {
-                opt.inJustDecodeBounds = true;
-                in = cbr.getInputStream(files.get(pageNum));
-                BitmapFactory.decodeStream(in, null, opt);
-            }finally {
-                if (in != null){
-                    in.close();
-
-                }
-
-            }
-            in = null;
-
-            //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
-
-            opt.inSampleSize = calculateInSampleSize(opt, 600, 600);
-            opt.inJustDecodeBounds = false;
-
-
-            try {
-                in = cbr.getInputStream(files.get(pageNum));
-                bitmap = BitmapFactory.decodeStream(in, null, opt);
-            } catch (RarException e) {
-                e.printStackTrace();
-            } finally {
-                if (in != null){
-                    in.close();
-                }
-
-            }
-
-
-            } catch (IOException e){
-                Log.e("Error loading bitmap", e.toString());
-        } catch (RarException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
 
     public List<FileHeader> getPages() {
         return mPages = getHeaders();
     }
 
-    public String getmFileName(){
+    private String getmFileName(){
         return cbr.toString();
     }
 
@@ -223,51 +176,4 @@ public class ReadCBR {
     }
 
 
-    public Bitmap getPageFile(FileHeader fileHeader, int maxLength){
-        Bitmap bitmap = null;
-        try{
-            InputStream in = null;
-            BitmapFactory.Options opt = new BitmapFactory.Options();
-
-
-
-            try {
-                opt.inJustDecodeBounds = true;
-                in = cbr.getInputStream(fileHeader);
-                BitmapFactory.decodeStream(in, null, opt);
-            } catch (RarException e) {
-                e.printStackTrace();
-            } finally {
-                if (in != null){
-                    in.close();
-
-                }
-
-            }
-            in = null;
-
-            //int scale = (maxLength <= 0) ? 1 : Math.max(opt.outWidth, opt.outHeight) / maxLength;
-
-            opt.inSampleSize = calculateInSampleSize(opt, opt.outWidth, opt.outHeight) / maxLength;
-            opt.inJustDecodeBounds = false;
-
-
-            try {
-                in = cbr.getInputStream(fileHeader);
-                bitmap = BitmapFactory.decodeStream(in, null, opt);
-            } catch (RarException e) {
-                e.printStackTrace();
-            } finally {
-                if (in != null){
-                    in.close();
-                }
-
-            }
-
-
-        } catch (IOException e){
-            Log.e("Error loading bitmap", e.toString());
-        }
-        return bitmap;
-    }
 }

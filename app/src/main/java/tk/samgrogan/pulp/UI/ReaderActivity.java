@@ -35,13 +35,13 @@ import tk.samgrogan.pulp.R;
 
 public class ReaderActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, DataApi.DataListener, GoogleApiClient.OnConnectionFailedListener {
 
-    List fileHeaderList = new ArrayList<>();
-    String mFilename;
-    ViewPager mPager;
+    private List fileHeaderList = new ArrayList<>();
+    private String mFilename;
+    private ViewPager mPager;
 
-    MyPagerAdapter myPagerAdapter;
-    Cursor mCursor;
-    GoogleApiClient mWear;
+    private MyPagerAdapter myPagerAdapter;
+    private Cursor mCursor;
+    private GoogleApiClient mWear;
 
     private static final String NEXT_MESSAGE = "/next";
     private static final String BACK_MESSAGE = "/back";
@@ -94,12 +94,12 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
 
     }
 
-    public int getNextItem(int item){
-        return mPager.getCurrentItem() + item;
+    private int getNextItem(){
+        return mPager.getCurrentItem() + 1;
     }
 
-    public int getPreviousItem(int item){
-        return mPager.getCurrentItem() - item;
+    private int getPreviousItem(){
+        return mPager.getCurrentItem() - 1;
     }
 
     @Override
@@ -140,9 +140,9 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().equals(NEXT_MESSAGE)){
                     Log.d("Wear","Got Message");
-                    mPager.setCurrentItem(getNextItem(1));
+                    mPager.setCurrentItem(getNextItem());
                 }else if (item.getUri().getPath().equals(BACK_MESSAGE)){
-                    mPager.setCurrentItem(getPreviousItem(1));
+                    mPager.setCurrentItem(getPreviousItem());
                 }
             }
         }

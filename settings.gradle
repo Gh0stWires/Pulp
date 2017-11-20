@@ -1,2 +1,3 @@
-include ':app', ':pulpremote'
+include ':app', ':pulpremote', ':mylibrary', ':library'
 
+project(':library').projectDir = new File('app/junrar-android-master/library')

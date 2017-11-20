@@ -11,10 +11,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,20 +44,20 @@ import static android.support.design.widget.Snackbar.make;
 
 public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    View view;
-    GridView pages;
-    ImageArrayAdapter adapter;
-    List<Bitmap> bitmaps = new ArrayList<Bitmap>();
-    List<BaseComic> baseComicList = new ArrayList<BaseComic>();
-    List<String> pathList = new ArrayList<>();
-    String boxName;
-    Cursor mCursor;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    FirebaseAuth firebaseAuth;
+    private View view;
+    private GridView pages;
+    private ImageArrayAdapter adapter;
+    private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+    private List<BaseComic> baseComicList = new ArrayList<BaseComic>();
+    private List<String> pathList = new ArrayList<>();
+    private String boxName;
+    private Cursor mCursor;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
 
     private static final int CURSOR_LOADER_ID = 0;
-    Comics comics = new Comics();
+    private Comics comics = new Comics();
 
     @Nullable
     @Override
@@ -68,7 +66,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         setHasOptionsMenu(true);
         bitmaps = comics.getBitmaps();
         adapter = new ImageArrayAdapter(view.getContext(),baseComicList);
-        new ThumbNailTask().execute();
+
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
         pages = (GridView) view.findViewById(R.id.selector_grid);
@@ -119,7 +117,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         }
     }
 
-    public void showDialog(){
+    private void showDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
 
         alert.setTitle(R.string.dialog_title);
@@ -146,7 +144,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         alert.show();
     }
 
-    public void pushData(){
+    private void pushData(){
         ComicDataObject dataObject = new ComicDataObject(boxName,pathList);
         databaseReference.push().setValue(dataObject);
     }
@@ -159,6 +157,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursor = data;
+        new ThumbNailTask().execute();
 
     }
 
@@ -176,7 +175,8 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         List<File> files = new ArrayList<>();
 
         private void checkFiles(File dir, List<File> files) {
-            String extension = ".cbr";
+            String extensionOne = ".cbr";
+            String extensionTwo = ".cbz";
             File[] fileList = dir.listFiles();
             if (fileList != null) {
                 for (int i = 0; i < fileList.length; i++) {
@@ -184,7 +184,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                         //if this is a directory, loop over the files in the directory
                         checkFiles(fileList[i], files);
                     } else {
-                        if (fileList[i].getName().endsWith(extension)) {
+                        if (fileList[i].getName().endsWith(extensionOne) || fileList[i].getName().endsWith(extensionTwo) ) {
                             //this is the file you want, do whatever with it here
                             files.add(fileList[i]);
                         }
@@ -199,17 +199,17 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
             cbr = new ReadCBR();
             cbz = new ReadCBZ();
             ContentValues mNewValues = new ContentValues();
-            folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-            Log.d("path", folder.toString());
-            checkFiles(folder,files);
-            Log.d("files",files.toString());
+            //folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
+            //Log.d("path", folder.toString());
+            //checkFiles(folder,files);
+            //Log.d("files",files.toString());
             for (mCursor.moveToFirst(); !mCursor.isAfterLast(); mCursor.moveToNext()){
                 if (mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)).endsWith(".cbr")) {
                     cbr.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
                     cbr.getCbr();
                     //bitmaps.add(cbr.getBitmap(getApplicationContext(), 1));
                     File cache = cbr.getBitmapFile(getContext(),1);
-                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache),false));
+                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache)));
                     comics.setBitmaps(cbr.getBitmap(cache));
                     //baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache)));
                     cbr.close();
@@ -217,7 +217,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     cbz.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
                     cbz.getCbz();
                     cbz.CbzComic();
-                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbz.getPage(1),false));
+                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbz.getPage(1)));
                     comics.setBitmaps(cbz.getPage(1));
                 }
             }

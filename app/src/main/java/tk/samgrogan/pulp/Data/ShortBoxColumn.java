@@ -13,7 +13,7 @@ import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
  * Created by ghost on 3/15/2017.
  */
 
-public class ShortBoxColumn {
+class ShortBoxColumn {
     @DataType(INTEGER) @PrimaryKey
     @AutoIncrement
     public static final String _ID = "_id";

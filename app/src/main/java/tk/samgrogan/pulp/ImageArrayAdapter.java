@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class ImageArrayAdapter extends RecyclerView.Adapter<ImageArrayAdapter.ViewHolder> {
 
-    List<Bitmap> files;
+    private List<Bitmap> files;
     LayoutInflater mInflater;
-    Context mContext;
+    private Context mContext;
 
 
     public ImageArrayAdapter(Context context, List<Bitmap> imageUrls){

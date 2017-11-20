@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ComicDataObject {
     public String collectionTitle;
-    public List<String> collectionList;
+    private List<String> collectionList;
 
     public ComicDataObject(){
 

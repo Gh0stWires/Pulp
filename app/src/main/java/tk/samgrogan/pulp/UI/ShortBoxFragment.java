@@ -32,12 +32,12 @@ import tk.samgrogan.pulp.SwipeDeckAdapter;
  */
 
 public class ShortBoxFragment extends Fragment {
-    List<Bitmap> bitmaps = new ArrayList<Bitmap>();
-    SwipeDeckAdapter adapter;
-    SwipeDeck pages;
-    View view;
-    List<String> firePaths = new ArrayList<>();
-    Comics comics = new Comics();
+    private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+    private SwipeDeckAdapter adapter;
+    private SwipeDeck pages;
+    private View view;
+    private List<String> firePaths = new ArrayList<>();
+    private Comics comics = new Comics();
     Cursor mCursor;
     private static final int CURSOR_LOADER_ID = 0;
 

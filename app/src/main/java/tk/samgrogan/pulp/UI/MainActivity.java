@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -38,19 +37,19 @@ import tk.samgrogan.pulp.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout mDrawer;
-    ActionBarDrawerToggle mToggle;
-    Toolbar toolbar;
-    RecyclerView navRecycler;
-    CoverFragment coverFragment;
-    FirebaseAuth firebaseAuth;
-    FirebaseAuth.AuthStateListener authStateListener;
-    ChildEventListener childEventListener;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    DrawerAdapter adapter;
-    List<DrawerItem> testList = new ArrayList<>();
-    List<ComicDataObject> collectionList = new ArrayList<>();
+    private DrawerLayout mDrawer;
+    private ActionBarDrawerToggle mToggle;
+    private Toolbar toolbar;
+    private RecyclerView navRecycler;
+    private CoverFragment coverFragment;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private ChildEventListener childEventListener;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private DrawerAdapter adapter;
+    private List<DrawerItem> testList = new ArrayList<>();
+    private List<ComicDataObject> collectionList = new ArrayList<>();
     private static final int RC_SIGN_IN = 123;
 
     //God object?
@@ -127,15 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
                 }else {
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setIsSmartLockEnabled(false)
-                            .setProviders(
-                                    AuthUI.EMAIL_PROVIDER,
-                                    AuthUI.GOOGLE_PROVIDER)
-                                    .setTheme(R.style.SignInTheme)
-                            .build(),RC_SIGN_IN);
+
                 }
             }
         };
@@ -147,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 collectionList.add(dataObject);
                 DrawerItem shortMaker = new DrawerItem();
                 shortMaker.setmTitle(dataObject.collectionTitle);
-                shortMaker.setmIcon(R.drawable.ic_menu_slideshow);
+                shortMaker.setmIcon();
                 testList.add(shortMaker);
                 adapter.notifyDataSetChanged();
                 //subMenu.add(dataObject.collectionTitle);

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amitshekhar.DebugDB;
 import com.daprlabs.cardstack.SwipeDeck;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -41,15 +42,15 @@ import tk.samgrogan.pulp.SwipeDeckAdapter;
 
 public class CoverFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    List<Bitmap> bitmaps = new ArrayList<Bitmap>();
-    SwipeDeckAdapter adapter;
-    SwipeDeck pages;
-    Cursor mCursor;
-    Context mContext;
+    private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+    private SwipeDeckAdapter adapter;
+    private SwipeDeck pages;
+    private Cursor mCursor;
+    private Context mContext;
 
     private static final int CURSOR_LOADER_ID = 0;
-    Comics comics = new Comics();
-    View view;
+    private Comics comics = new Comics();
+    private View view;
 
 
     @Nullable
@@ -104,13 +105,6 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         });
         return view;
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        //mCursor.close();
-    }
-
 
 
     @Override
@@ -196,7 +190,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
-            //Log.d("DB SITE", DebugDB.getAddressLog());
+            Log.d("DB SITE", DebugDB.getAddressLog());
 
 
             /**/

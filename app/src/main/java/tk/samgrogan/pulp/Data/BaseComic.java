@@ -7,14 +7,14 @@ import android.graphics.Bitmap;
  */
 
 public class BaseComic {
-    public String title;
+    private String title;
     public Bitmap cover;
-    public boolean selected;
+    private boolean selected;
 
-    public BaseComic(String title, Bitmap cover, boolean selected){
+    public BaseComic(String title, Bitmap cover){
         this.title = title;
         this.cover = cover;
-        this.selected = selected;
+        this.selected = false;
     }
 
     public String getTitle() {
