@@ -99,7 +99,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                Bundle bundle = new Bundle();
                                                ArrayList<String> passList = new ArrayList<>();
                                                passList.addAll(collectionList.get(position).getCollectionList());
+                                               String box = collectionList.get(position).collectionTitle;
                                                bundle.putStringArrayList("collection-paths", passList);
+                                               bundle.putString("box-name", box);
                                                ShortBoxFragment fragment = new ShortBoxFragment();
                                                fragment.setArguments(bundle);
                                                android.app.FragmentManager fragmentManager = getFragmentManager();
@@ -147,7 +149,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                ComicDataObject dataObject = dataSnapshot.getValue(ComicDataObject.class);
+                collectionList.add(dataObject);
+                DrawerItem shortMaker = new DrawerItem();
+                shortMaker.setmTitle(dataObject.collectionTitle);
+                shortMaker.setmIcon();
+                testList.add(shortMaker);
+                adapter.notifyDataSetChanged();
             }
 
             @Override

@@ -49,5 +49,9 @@ public class Comics implements Serializable{
     public List<FileHeader> getPageHeaders() {
         return pageHeaders;
     }
+
+    public void clearBitmaps(){
+        bitmaps = new ArrayList<>();
+    }
 }
 

@@ -3,7 +3,6 @@ package tk.samgrogan.pulp.UI;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
@@ -11,8 +10,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipFile;
 
 import tk.samgrogan.pulp.Data.BaseComic;
 import tk.samgrogan.pulp.Data.ComicColumns;
@@ -40,6 +44,7 @@ import tk.samgrogan.pulp.Models.ComicDataObject;
 import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
 
+import static android.support.design.widget.BaseTransientBottomBar.LENGTH_LONG;
 import static android.support.design.widget.Snackbar.make;
 
 public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -55,6 +60,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+    private Map<String, ComicDataObject> comicsListRemote = new HashMap<>();
 
     private static final int CURSOR_LOADER_ID = 0;
     private Comics comics = new Comics();
@@ -90,7 +96,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                     baseComicList.get(position).setSelected(false);
                     Snackbar snackbar = make(pages,R.string.unselected,Snackbar.LENGTH_LONG);
                     snackbar.show();
-                    pathList.remove(position);
+                    pathList.remove(baseComicList.get(position).getTitle());
                     adapter.notifyDataSetChanged();
                 }
 
@@ -130,7 +136,15 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 boxName = input.getText().toString();
-                pushData();
+                if (!pathList.isEmpty() & !boxName.isEmpty()) {
+                    pushData();
+                }else if (pathList.isEmpty()){
+                    Snackbar.make(pages, "No comics selected: Please try again", LENGTH_LONG).show();
+                }else if (boxName.isEmpty()){
+                    Snackbar.make(pages, "No Tile Selected: Please try again", Snackbar.LENGTH_LONG).show();
+                }else if (pathList.isEmpty() & boxName.isEmpty()){
+                    Snackbar.make(pages, "Box not created: You didn't select anything", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -145,8 +159,9 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     }
 
     private void pushData(){
+        //comicsListRemote.put(boxName, new ComicDataObject(boxName,pathList);
         ComicDataObject dataObject = new ComicDataObject(boxName,pathList);
-        databaseReference.push().setValue(dataObject);
+        databaseReference.child(boxName).setValue(dataObject);
     }
 
     @Override
@@ -198,30 +213,36 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         protected Bitmap doInBackground(Object... params) {
             cbr = new ReadCBR();
             cbz = new ReadCBZ();
-            ContentValues mNewValues = new ContentValues();
-            //folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-            //Log.d("path", folder.toString());
-            //checkFiles(folder,files);
-            //Log.d("files",files.toString());
-            for (mCursor.moveToFirst(); !mCursor.isAfterLast(); mCursor.moveToNext()){
-                if (mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)).endsWith(".cbr")) {
-                    cbr.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
+            //mNewValues = new ContentValues();
+            folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
+            Log.d("path", folder.toString());
+            checkFiles(folder, files);
+            Log.d("files", files.toString());
+            for (int i = 0; i < files.size(); i++) {
+                //
+                File file = files.get(i);
+                comics.setFilenames(file);
+
+                if (file.getName().endsWith(".cbr")) {
+                    cbr.read(file.toString());
                     cbr.getCbr();
-                    //bitmaps.add(cbr.getBitmap(getApplicationContext(), 1));
-                    File cache = cbr.getBitmapFile(getContext(),1);
-                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache)));
+                    File cache = cbr.getBitmapFile(getContext(), 1);
+                    baseComicList.add(new BaseComic(cache.getAbsolutePath(),cbr.getBitmap(cache)));
                     comics.setBitmaps(cbr.getBitmap(cache));
-                    //baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbr.getBitmap(cache)));
-                    cbr.close();
-                }else {
-                    cbz.read(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)));
-                    cbz.getCbz();
-                    cbz.CbzComic();
-                    baseComicList.add(new BaseComic(mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE)),cbz.getPage(1)));
-                    comics.setBitmaps(cbz.getPage(1));
+                } else {
+                    cbz.read(file.toString());
+                    ZipFile zip = cbz.getCbz();
+                    if (zip != null) {
+                        cbz.CbzComic();
+                        baseComicList.add(new BaseComic(file.getAbsolutePath(),cbz.getPage(1)));
+                        comics.setBitmaps(cbz.getPage(1));
+                    }
                 }
+
+                cbr.close();
+                //mCursor.close();
+
             }
-            //mCursor.close();
             return null;
         }
 

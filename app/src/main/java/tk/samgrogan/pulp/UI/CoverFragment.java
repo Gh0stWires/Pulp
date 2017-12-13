@@ -27,6 +27,7 @@ import com.google.android.gms.ads.MobileAds;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import tk.samgrogan.pulp.Data.ComicColumns;
 import tk.samgrogan.pulp.Data.ComicProvider;
@@ -176,9 +177,11 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
                     comics.setBitmaps(cbr.getBitmap(cache));
                 }else {
                     cbz.read(file.toString());
-                    cbz.getCbz();
-                    cbz.CbzComic();
-                    comics.setBitmaps(cbz.getPage(1));
+                    ZipFile zip = cbz.getCbz();
+                    if (zip != null) {
+                        cbz.CbzComic();
+                        comics.setBitmaps(cbz.getPage(1));
+                    }
                 }
 
                 cbr.close();

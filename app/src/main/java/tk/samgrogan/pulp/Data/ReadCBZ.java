@@ -27,7 +27,7 @@ public class ReadCBZ {
     public ReadCBZ(){}
 
     public void read(String fileName){
-        mFileName = fileName;
+        this.mFileName = fileName;
     }
 
     public ZipFile getCbz(){
