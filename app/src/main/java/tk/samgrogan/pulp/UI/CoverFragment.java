@@ -48,6 +48,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
     private SwipeDeck pages;
     private Cursor mCursor;
     private Context mContext;
+    private List<String> filePaths = new ArrayList<>();
 
     private static final int CURSOR_LOADER_ID = 0;
     private Comics comics = new Comics();
@@ -82,8 +83,9 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
 
             @Override
             public void cardSwipedRight(int position) {
-                mCursor.moveToPosition(position);
-                String fileName = mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE));
+                //mCursor.moveToPosition(position);
+                //String fileName = mCursor.getString(mCursor.getColumnIndex(ComicColumns.TITLE));
+                String fileName = filePaths.get(position);
                 Intent intent = new Intent(view.getContext(), ReaderActivity.class).putExtra("filename", fileName);
                 startActivity(intent);
 
@@ -175,12 +177,14 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
                     cbr.getCbr();
                     File cache = cbr.getBitmapFile(mContext,1);
                     comics.setBitmaps(cbr.getBitmap(cache));
+                    filePaths.add(file.toString());
                 }else {
                     cbz.read(file.toString());
                     ZipFile zip = cbz.getCbz();
                     if (zip != null) {
                         cbz.CbzComic();
                         comics.setBitmaps(cbz.getPage(1));
+                        filePaths.add(file.toString());
                     }
                 }
 
