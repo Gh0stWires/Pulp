@@ -4,7 +4,6 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:swipedeck="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     android:background="@color/pulp"
     android:orientation="vertical">
