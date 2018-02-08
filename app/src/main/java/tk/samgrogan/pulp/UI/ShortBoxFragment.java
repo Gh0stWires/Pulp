@@ -16,9 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.daprlabs.cardstack.SwipeDeck;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,11 +88,11 @@ public class ShortBoxFragment extends Fragment {
 
         //firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("collections").child(boxName).child("collectionList").
 
-        MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
+        /*MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
 
         AdView mAdView = (AdView) view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);*/
 
 
         //new ThumbNailTask().execute();

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
         setContentView(R.layout.cover_fragment);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.include);
         navRecycler = (RecyclerView)findViewById(R.id.nvView);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle( this, mDrawer, toolbar,  R.string.open, R.string.close){

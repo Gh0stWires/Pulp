@@ -16,23 +16,22 @@
         xmlns:android="http://schemas.android.com/apk/res/android"/>-->
 
 
-    <com.google.android.gms.ads.AdView
+    <!--<com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id" />
+        ads:adUnitId="@string/banner_ad_unit_id" />-->
 
     <com.daprlabs.cardstack.SwipeDeck
         android:id="@+id/test_list"
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="match_parent"
         swipedeck:max_visible="3"
-        swipedeck:render_above="false" />
+        android:clipToPadding="false" />
 
 
 </com.daprlabs.cardstack.SwipeLinearLayout>

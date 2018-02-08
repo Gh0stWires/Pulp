@@ -15,6 +15,7 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:windowBackground">@color/pulp</item>
+        <item name="android:fitsSystemWindows">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 

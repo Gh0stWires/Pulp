@@ -20,9 +20,6 @@ import android.view.ViewGroup;
 
 import com.amitshekhar.DebugDB;
 import com.daprlabs.cardstack.SwipeDeck;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,11 +60,11 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         mContext = view.getContext();
 
 
-        MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
+        /*MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
 
         AdView mAdView = (AdView) view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);*/
         adapter = new SwipeDeckAdapter(bitmaps, view.getContext());
 
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
