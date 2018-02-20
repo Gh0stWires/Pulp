@@ -46,7 +46,9 @@
             android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:layout_marginTop="?attr/actionBarSize"
+            app:itemTextColor="@color/black"
+            android:layout_marginTop="70dp"
+
             android:background="@color/pulp"
             app:menu="@menu/nav_drawer">
 

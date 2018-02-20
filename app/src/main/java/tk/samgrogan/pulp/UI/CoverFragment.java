@@ -17,8 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-import com.amitshekhar.DebugDB;
+
 import com.daprlabs.cardstack.SwipeDeck;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
     private Cursor mCursor;
     private Context mContext;
     private List<String> filePaths = new ArrayList<>();
+    private ProgressBar progressBar;
 
     private static final int CURSOR_LOADER_ID = 0;
     private Comics comics = new Comics();
@@ -57,8 +59,10 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_main, container, false);
         bitmaps = comics.getBitmaps();
-        mContext = view.getContext();
+        mContext = getActivity();
 
+        progressBar = view.findViewById(R.id.progress);
+        progressBar.setVisibility(View.VISIBLE);
 
         /*MobileAds.initialize(view.getContext(), getString(R.string.app_pub));
 
@@ -68,7 +72,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         adapter = new SwipeDeckAdapter(bitmaps, view.getContext());
 
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
-        new ThumbNailTask().execute();
+        new ThumbNailTask(mContext).execute();
 
 
         pages = (SwipeDeck) view.findViewById(R.id.test_list);
@@ -130,8 +134,13 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         File folder;
         ReadCBR cbr;
         ReadCBZ cbz;
+        Context mContext;
         List<File> files = new ArrayList<>();
         ContentValues mNewValues = new ContentValues();
+
+        public ThumbNailTask(Context context){
+            this.mContext = context;
+        }
 
         private void checkFiles(File dir, List<File> files) {
             String extensionOne = ".cbr";
@@ -172,20 +181,23 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
                 if (file.getName().endsWith(".cbr")){
                     cbr.read(file.toString());
                     cbr.getCbr();
-                    File cache = cbr.getBitmapFile(mContext,1);
+                    File cache = cbr.getBitmapFile(mContext,0);
+
                     comics.setBitmaps(cbr.getBitmap(cache));
                     filePaths.add(file.toString());
+
                 }else {
                     cbz.read(file.toString());
                     ZipFile zip = cbz.getCbz();
                     if (zip != null) {
                         cbz.CbzComic();
-                        comics.setBitmaps(cbz.getPage(1));
+                        comics.setBitmaps(cbz.getPage(0));
                         filePaths.add(file.toString());
                     }
                 }
 
-                cbr.close();
+                //cbr.close();
+
             }
             return null;
         }
@@ -194,8 +206,7 @@ public class CoverFragment extends Fragment implements LoaderManager.LoaderCallb
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
-            Log.d("DB SITE", DebugDB.getAddressLog());
-
+            progressBar.setVisibility(View.GONE);
 
             /**/
 

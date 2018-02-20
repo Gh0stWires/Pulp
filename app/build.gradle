@@ -67,7 +67,7 @@ dependencies {
     apt 'net.simonvt.schematic:schematic-compiler:0.7.0'
     annotationProcessor 'net.simonvt.schematic:schematic-compiler:0.7.0'
     implementation 'net.simonvt.schematic:schematic:0.7.0'
-    debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
+    //debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
     testCompile 'junit:junit:4.12'
 
 }

@@ -1,8 +1,8 @@
 package tk.samgrogan.pulp.UI;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Data.ReadCBZ;
@@ -45,23 +47,37 @@ public class ShortBoxFragment extends Fragment {
     private View view;
     private List<String> firePaths = new ArrayList<>();
     private Comics comics = new Comics();
-    Cursor mCursor;
+    private ProgressBar progressBar;
+    private Context mContxt;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private String comicName;
     private String path;
+    private Snackbar missing;
     private String boxName;
     private static final int CURSOR_LOADER_ID = 0;
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (missing != null) {
+            missing.dismiss();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_main, container, false);
+        view = inflater.inflate(R.layout.short_box_fragment, container, false);
+        mContxt = getActivity();
         //bitmaps = comics.getBitmaps();
         boxName = getArguments().getString("box-name");
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        progressBar = view.findViewById(R.id.progress);
+        progressBar.setVisibility(View.GONE);
 
         databaseReference = firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("collections").child(boxName);
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -74,7 +90,7 @@ public class ShortBoxFragment extends Fragment {
                 firePaths.addAll(comicDataObject.getCollectionList());
                 comics.clearBitmaps();
                 //bitmaps = comics.getBitmaps();
-                new ThumbNailTask().execute();
+                new ThumbNailTask(mContxt).execute();
 
             }
 
@@ -98,7 +114,7 @@ public class ShortBoxFragment extends Fragment {
         //new ThumbNailTask().execute();
         //getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
-        pages = (SwipeDeck) view.findViewById(R.id.test_list);
+        pages = (SwipeDeck) view.findViewById(R.id.box_list);
         pages.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
@@ -134,11 +150,18 @@ public class ShortBoxFragment extends Fragment {
 
 
 
+
+
     public class ThumbNailTask extends AsyncTask<Object,Object,Bitmap> {
         File folder;
         ReadCBR cbr;
         ReadCBZ cbz;
+        Context mContext;
         boolean refreshToken = false;
+
+        public ThumbNailTask(Context context){
+            this.mContext = context;
+        }
 
 
         @Override
@@ -161,13 +184,15 @@ public class ShortBoxFragment extends Fragment {
                     if (file.endsWith(".cbr")) {
                         cbr.read(file);
                         cbr.getCbr();
-                        File cache = cbr.getBitmapFile(getContext(), 1);
+                        File cache = cbr.getBitmapFile(mContext, 0);
                         comics.setBitmaps(cbr.getBitmap(cache));
                     } else {
                         cbz.read(file);
-                        cbz.getCbz();
-                        cbz.CbzComic();
-                        comics.setBitmaps(cbz.getPage(1));
+                        ZipFile zip = cbz.getCbz();
+                        if (zip != null) {
+                            cbz.CbzComic();
+                            comics.setBitmaps(cbz.getPage(0));
+                        }
                     }
                 }
 
@@ -183,9 +208,10 @@ public class ShortBoxFragment extends Fragment {
             adapter = new SwipeDeckAdapter(bitmaps, view.getContext());
             pages.setAdapter(adapter);
             if (refreshToken){
-               Snackbar missing = Snackbar.make(pages, "Comic is missing", BaseTransientBottomBar.LENGTH_INDEFINITE);
-               missing.setAction("Find Comic", new ComicSearchAction());
-               missing.show();
+
+                missing = Snackbar.make(getActivity().findViewById(R.id.private_box), "Comic is missing", BaseTransientBottomBar.LENGTH_INDEFINITE);
+                missing.setAction("Find Comic", new ComicSearchAction());
+                missing.show();
             }
             //Log.d("DB SITE", DebugDB.getAddressLog());
 
@@ -203,6 +229,7 @@ public class ShortBoxFragment extends Fragment {
         public void onClick(View v) {
             File folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
             checkFiles(folder, comicName);
+            missing.dismiss();
 
         }
     }

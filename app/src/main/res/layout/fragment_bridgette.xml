@@ -4,9 +4,8 @@
     android:id="@+id/activity_bridgette"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
-    tools:context="tk.samgrogan.pulp.UI.Bridgette"
+    tools:context="tk.samgrogan.pulp.UI.ShortMaker"
     android:background="@color/pulp">
     <GridView
         android:layout_width="wrap_content"
@@ -16,5 +15,12 @@
         android:verticalSpacing="6dp"
         android:horizontalSpacing="6dp"
         android:id="@+id/selector_grid"/>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/progress_bridge"
+        android:layout_centerVertical="true"
+        android:theme="@style/ProgressTheme"/>
 
 </RelativeLayout>

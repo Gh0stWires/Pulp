@@ -1,5 +1,7 @@
 package tk.samgrogan.pulp.Models;
 
+import tk.samgrogan.pulp.R;
+
 /**
  * Created by ghost on 3/24/2017.
  */
@@ -25,6 +27,6 @@ public class DrawerItem {
     }
 
     public void setmIcon() {
-        this.mIcon = tk.samgrogan.pulp.R.drawable.ic_menu_slideshow;
+        this.mIcon = R.drawable.ic_short_box;
     }
 }

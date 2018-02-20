@@ -56,7 +56,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name=".UI.Bridgette" />
+        <activity android:name=".UI.ShortMaker" />
 
         <activity android:name=".UI.SignInActivity">
             <intent-filter>

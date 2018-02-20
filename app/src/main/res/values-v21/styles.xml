@@ -15,6 +15,9 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:windowBackground">@color/pulp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textColor">@color/black</item>
+        <item name="android:itemTextAppearance">@color/black</item>
         <item name="android:fitsSystemWindows">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
@@ -22,6 +25,7 @@
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@color/pulp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="SignInTheme" parent="FirebaseUI">
@@ -33,6 +37,11 @@
         <item name="colorControlHighlight">@color/colorPrimary</item>
         <item name="android:windowBackground">@color/pulp</item>
         <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="ProgressTheme" >
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+
     </style>
 
 </resources>

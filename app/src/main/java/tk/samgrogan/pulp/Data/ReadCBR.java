@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -58,6 +59,24 @@ public class ReadCBR {
         return cbr;
     }
 
+    public boolean isImage(FileHeader file) {
+        if (file == null ) {
+            return false;
+        }
+        InputStream in = null;
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inJustDecodeBounds = true;
+        try {
+            in = cbr.getInputStream(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RarException e) {
+            e.printStackTrace();
+        }
+        BitmapFactory.decodeStream(in,null,opt);
+        return opt.outWidth != -1 && opt.outHeight != -1;
+    }
+
     private List<FileHeader> getHeaders(){
         List<FileHeader> fileHeaders = cbr.getFileHeaders();
         Collections.sort(fileHeaders, new Comp());
@@ -94,11 +113,18 @@ public class ReadCBR {
         FileOutputStream file = null;
         File c = null;
         try {
+
             String fileName = Uri.parse(uri).getLastPathSegment();
             c = new File(context.getCacheDir() + fileName);
             file = new FileOutputStream(c);
-            cbr.extractFile(files.get(pageNum),file);
-            file.close();
+            if (isImage(files.get(pageNum))){
+                cbr.extractFile(files.get(pageNum),file);
+                file.close();
+            }else {
+                cbr.extractFile(files.get(1),file);
+                file.close();
+            }
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

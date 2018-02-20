@@ -3,6 +3,7 @@ package tk.samgrogan.pulp.UI;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +49,7 @@ import tk.samgrogan.pulp.R;
 import static android.support.design.widget.BaseTransientBottomBar.LENGTH_LONG;
 import static android.support.design.widget.Snackbar.make;
 
-public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ShortMaker extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private View view;
     private GridView pages;
@@ -56,7 +58,9 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     private List<BaseComic> baseComicList = new ArrayList<BaseComic>();
     private List<String> pathList = new ArrayList<>();
     private String boxName;
+    private ProgressBar progressBar;
     private Cursor mCursor;
+    private Context mContext;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -69,6 +73,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_bridgette, container, false);
+        mContext = getActivity();
         setHasOptionsMenu(true);
         bitmaps = comics.getBitmaps();
         adapter = new ImageArrayAdapter(view.getContext(),baseComicList);
@@ -77,6 +82,9 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
 
         pages = (GridView) view.findViewById(R.id.selector_grid);
         pages.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+
+        progressBar = view.findViewById(R.id.progress_bridge);
+        progressBar.setVisibility(View.VISIBLE);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -172,7 +180,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursor = data;
-        new ThumbNailTask().execute();
+        new ThumbNailTask(mContext).execute();
 
     }
 
@@ -187,7 +195,12 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         File folder;
         ReadCBR cbr;
         ReadCBZ cbz;
+        Context mContext;
         List<File> files = new ArrayList<>();
+
+        public ThumbNailTask(Context context){
+            this.mContext = context;
+        }
 
         private void checkFiles(File dir, List<File> files) {
             String extensionOne = ".cbr";
@@ -219,6 +232,10 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
             checkFiles(folder, files);
             Log.d("files", files.toString());
             for (int i = 0; i < files.size(); i++) {
+
+                if (isCancelled()){
+                    break;
+                }
                 //
                 File file = files.get(i);
                 comics.setFilenames(file);
@@ -226,16 +243,19 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
                 if (file.getName().endsWith(".cbr")) {
                     cbr.read(file.toString());
                     cbr.getCbr();
-                    File cache = cbr.getBitmapFile(getContext(), 1);
-                    baseComicList.add(new BaseComic(cache.getAbsolutePath(),cbr.getBitmap(cache)));
+                    if (isCancelled()){
+                        break;
+                    }
+                    File cache = cbr.getBitmapFile(mContext, 0);
+                    baseComicList.add(new BaseComic(file.getPath(),cbr.getBitmap(cache)));
                     comics.setBitmaps(cbr.getBitmap(cache));
                 } else {
                     cbz.read(file.toString());
                     ZipFile zip = cbz.getCbz();
                     if (zip != null) {
                         cbz.CbzComic();
-                        baseComicList.add(new BaseComic(file.getAbsolutePath(),cbz.getPage(1)));
-                        comics.setBitmaps(cbz.getPage(1));
+                        baseComicList.add(new BaseComic(file.getAbsolutePath(),cbz.getPage(0)));
+                        comics.setBitmaps(cbz.getPage(0));
                     }
                 }
 
@@ -250,6 +270,7 @@ public class Bridgette extends Fragment implements LoaderManager.LoaderCallbacks
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             pages.setAdapter(adapter);
+            progressBar.setVisibility(View.GONE);
 
             //Log.d("DB SITE", DebugDB.getAddressLog());
 

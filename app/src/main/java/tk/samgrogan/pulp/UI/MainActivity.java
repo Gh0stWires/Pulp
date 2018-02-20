@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private DrawerAdapter adapter;
-    private List<DrawerItem> testList = new ArrayList<>();
+    private List<DrawerItem> drawerItems = new ArrayList<>();
     private List<ComicDataObject> collectionList = new ArrayList<>();
     private static final int RC_SIGN_IN = 123;
 
@@ -89,25 +89,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        adapter = new DrawerAdapter(testList);
+        adapter = new DrawerAdapter(drawerItems);
         navRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
 
-        adapter.setOnItemClickListener(new DrawerAdapter.OnItemSelectedListener() {
-                                           @Override
-                                           public void onItemSelected(View view, int position) {
-                                               Bundle bundle = new Bundle();
-                                               //ArrayList<String> passList = new ArrayList<>();
-                                               //passList.addAll(collectionList.get(position).getCollectionList());
-                                               String box = collectionList.get(position).collectionTitle;
-                                               //bundle.putStringArrayList("collection-paths", passList);
-                                               bundle.putString("box-name", box);
-                                               ShortBoxFragment fragment = new ShortBoxFragment();
-                                               fragment.setArguments(bundle);
-                                               android.app.FragmentManager fragmentManager = getFragmentManager();
-                                               fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                                           }
-                                       });
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -133,6 +119,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
+        adapter.setOnItemClickListener(new DrawerAdapter.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(View view, int position) {
+                Bundle bundle = new Bundle();
+                //ArrayList<String> passList = new ArrayList<>();
+                //passList.addAll(collectionList.get(position).getCollectionList());
+                String box = collectionList.get(position).collectionTitle;
+                //bundle.putStringArrayList("collection-paths", passList);
+                bundle.putString("box-name", box);
+                ShortBoxFragment fragment = new ShortBoxFragment();
+                fragment.setArguments(bundle);
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                mDrawer.closeDrawers();
+            }
+        });
+
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -141,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 DrawerItem shortMaker = new DrawerItem();
                 shortMaker.setmTitle(dataObject.collectionTitle);
                 shortMaker.setmIcon();
-                testList.add(shortMaker);
+                drawerItems.add(shortMaker);
                 adapter.notifyDataSetChanged();
                 //subMenu.add(dataObject.collectionTitle);
 
@@ -230,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.collections) {
-            Bridgette coverFragment = new Bridgette();
+            ShortMaker coverFragment = new ShortMaker();
             android.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, coverFragment).commit();
         }else if (id == R.id.all){

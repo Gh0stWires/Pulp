@@ -2,6 +2,7 @@ package tk.samgrogan.pulp.Data;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +21,19 @@ import java.util.zip.ZipFile;
 public class ReadCBZ {
 
     private String mFileName;
-    ZipFile cbz;
+    ZipFile cbz = null;
     private ArrayList mPages;
 
 
     public ReadCBZ(){}
+
+    public void close(){
+        try {
+            cbz.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void read(String fileName){
         this.mFileName = fileName;
@@ -35,23 +44,47 @@ public class ReadCBZ {
             cbz = new ZipFile(new File(mFileName));
         } catch (IOException e) {
             e.printStackTrace();
+            cbz = null;
         }
 
         return cbz;
     }
+
+    public  boolean isImage(ZipEntry entry) {
+        if (entry == null){
+            return false;
+        }
+        InputStream in = null;
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inJustDecodeBounds = true;
+        try {
+            in = cbz.getInputStream(entry);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BitmapFactory.decodeStream(in,null,opt);
+        return opt.outWidth != -1 && opt.outHeight != -1;
+    }
+
+
     //TODO
     public void CbzComic() {
 
         // populate mPages with the names of all the ZipEntries
         //cbz = new ZipFile(mFileName);
-        mPages = new ArrayList<String>();
-        Enumeration<? extends ZipEntry> entries = cbz.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry entry = entries.nextElement();
+        try {
+            mPages = new ArrayList<String>();
+            Enumeration<? extends ZipEntry> entries = cbz.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
 
+                if (isImage(entry)) {
+                    mPages.add(entry.getName());
+                }
 
-            mPages.add(entry.getName());
-
+            }
+        } catch (Exception e) {
+            Log.e( "Error opening file", "error");
         }
 
     }
@@ -96,6 +129,8 @@ public class ReadCBZ {
         }
         return bitmap;
     }
+
+
 
 
     /*public File getBitmapFile(Context context, int pageNum){
