@@ -5,7 +5,7 @@ Pulp is a comic book reader for android. It can read CBZ and CBR comic files. I 
 <a href='https://play.google.com/store/apps/details?id=tk.samgrogan.pulp&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="100"/></a>
 
 # UI
-<img src="Screenshots/screener_1519094856074.png" width="250" height="400" />                                                               
+<img src="Screenshots/screener_1519094856074.png" width="250" height="450" />  <img src="Screenshots/screener_1519094938875.png" width="250" height="450" /> <img src="Screenshots/screener_1519094775602.png" width="250" height="450" />                                                               
                                 To create the feeling
                                 of handleing a real comic
                                 I decided to make the cover
@@ -13,28 +13,22 @@ Pulp is a comic book reader for android. It can read CBZ and CBR comic files. I 
                                 object. To achieve this
                                 I used [Swipe-Deck](https://github.com/aaronbond/Swipe-Deck)
 
-
-
-
-
-
-![demo](Screenshots/9B7xCr.gif)                               
-                                Swiping the Comic left goes
-                                to the next one in the stack 
-                                but swiping right opens the comic 
-                                up so you can read it.
+                         
+ Swiping the Comic left goes
+ to the next one in the stack 
+ but swiping right opens the comic 
+ up so you can read it.
                                 
 # Firebase and Collections                                
-![demo](Screenshots/YS6Qhk.gif)
-                                The user can make there own
-                                lists of comics. this prevents
-                                the user from having to swipe
-                                through a large list of comics
-                                just to find the one they want 
-                                to read. I use firebase to store 
-                                these lists for each user. That way 
-                                if the user switches devices they
-                                can still access there collections.
+ The user can make there own
+ lists of comics. this prevents
+ the user from having to swipe
+ through a large list of comics
+ just to find the one they want 
+ to read. I use firebase to store 
+ these lists for each user. That way 
+ if the user switches devices they
+ can still access there collections.
  
  # Update
  
