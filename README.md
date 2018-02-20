@@ -2,7 +2,7 @@
 Pulp is a comic book reader for android. It can read CBZ and CBR comic files. I created Pulp because I wanted reading digital comic books to feel the same way as reading real ones. I definately learned a lot about dealing with compressed archives and bitmaps in this project.
 
 
-<a href='https://play.google.com/store/apps/details?id=tk.samgrogan.pulp&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=tk.samgrogan.pulp&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="100"/></a>
 
 # UI
 ![demo](Screenshots/GZYEAJ.gif)                                                                
