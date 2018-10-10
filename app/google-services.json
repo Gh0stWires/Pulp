@@ -15,16 +15,24 @@
       },
       "oauth_client": [
         {
-          "client_id": "376546302947-derl4lj8o6182ok5n461ucp23nek9e78.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
           "client_id": "376546302947-ca0qv4h0cbo5tlv4n5bbfldrqsj5j9es.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "tk.samgrogan.pulp",
             "certificate_hash": "d29dbd137ff48270ad4e13b8e090a7a4bf8fd95e"
           }
+        },
+        {
+          "client_id": "376546302947-7m44dgmo5s532pftf4p6fa042dthkf10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tk.samgrogan.pulp",
+            "certificate_hash": "47fc368acf6aa7ba0d3963748b6150c86ee1df92"
+          }
+        },
+        {
+          "client_id": "376546302947-derl4lj8o6182ok5n461ucp23nek9e78.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -48,7 +56,8 @@
         "ads_service": {
           "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5232768983698923~2903173093"
     }
   ],
   "configuration_version": "1"
