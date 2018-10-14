@@ -1,48 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.daprlabs.cardstack.SwipeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
-    xmlns:swipedeck="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pulp"
-    android:orientation="vertical">
+    tools:context=".UI.MainActivity">
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="175dp"
-        android:layout_marginTop="290dp"
-        android:indeterminate="true"
-        android:theme="@style/ProgressTheme" />
-
-    <!---->
-
-    <!--<include layout="@layout/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        xmlns:android="http://schemas.android.com/apk/res/android"/>-->
-
-
-    <!--<com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id" />-->
-
-    <com.daprlabs.cardstack.SwipeDeck
-        android:id="@+id/test_list"
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        swipedeck:max_visible="3"
-        android:clipToPadding="false" />
+        android:id="@+id/hostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true" />
 
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:background="@color/pulp"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:menu="@menu/bottom_navigation"
+        android:layout_gravity="bottom">
 
-</com.daprlabs.cardstack.SwipeLinearLayout>
+    </android.support.design.widget.BottomNavigationView>
+
+</android.support.design.widget.CoordinatorLayout>
 
 
 

@@ -27,7 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipFile;
 
 import tk.samgrogan.pulp.Data.ReadCBR;
 import tk.samgrogan.pulp.Data.ReadCBZ;
@@ -167,7 +166,7 @@ public class ShortBoxFragment extends Fragment {
         @Override
         protected Bitmap doInBackground(Object... params) {
             cbr = new ReadCBR();
-            cbz = new ReadCBZ();
+            //cbz = new ReadCBZ();
 
             folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
             for (int i = 0; i < firePaths.size(); i++){
@@ -187,12 +186,12 @@ public class ShortBoxFragment extends Fragment {
                         File cache = cbr.getBitmapFile(mContext, 0);
                         comics.setBitmaps(cbr.getBitmap(cache));
                     } else {
-                        cbz.read(file);
+                        /*cbz.read(file);
                         ZipFile zip = cbz.getCbz();
                         if (zip != null) {
                             cbz.CbzComic();
                             comics.setBitmaps(cbz.getPage(0));
-                        }
+                        }*/
                     }
                 }
 

@@ -185,11 +185,11 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
                 fileHeaderList = cbr.getPages();
                 cbr.close();
             }else {
-                cbz = new ReadCBZ();
+               /* cbz = new ReadCBZ();
                 cbz.read(file.toString());
                 cbz.getCbz();
                 cbz.CbzComic();
-                fileHeaderList = cbz.getPages();
+                fileHeaderList = cbz.getPages();*/
             }
 
             return null;

@@ -51,10 +51,15 @@ repositories {
 
 dependencies {
     ext.anko_version='0.10.7'
+    def nav_version = "1.0.0-alpha06"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.0.0'
     implementation 'com.android.support:design:27.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.github.nihad92:SwipeableCards:1.0.19'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation "android.arch.navigation:navigation-fragment:$nav_version" // use -ktx for Kotlin
+    implementation "android.arch.navigation:navigation-ui:$nav_version" // use -ktx for Kotlin
     wearApp project(':pulpremote')
     implementation "org.jetbrains.anko:anko-common:$anko_version"
     implementation project(':library')

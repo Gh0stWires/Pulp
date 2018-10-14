@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipFile;
 
 import tk.samgrogan.pulp.Data.BaseComic;
 import tk.samgrogan.pulp.Data.ComicColumns;
@@ -225,7 +224,7 @@ public class ShortMaker extends Fragment implements LoaderManager.LoaderCallback
         @Override
         protected Bitmap doInBackground(Object... params) {
             cbr = new ReadCBR();
-            cbz = new ReadCBZ();
+            //cbz = new ReadCBZ();
             //mNewValues = new ContentValues();
             folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
             Log.d("path", folder.toString());
@@ -250,13 +249,13 @@ public class ShortMaker extends Fragment implements LoaderManager.LoaderCallback
                     baseComicList.add(new BaseComic(file.getPath(),cbr.getBitmap(cache)));
                     comics.setBitmaps(cbr.getBitmap(cache));
                 } else {
-                    cbz.read(file.toString());
+                    /*cbz.read(file.toString());
                     ZipFile zip = cbz.getCbz();
                     if (zip != null) {
                         cbz.CbzComic();
                         baseComicList.add(new BaseComic(file.getAbsolutePath(),cbz.getPage(0)));
                         comics.setBitmaps(cbz.getPage(0));
-                    }
+                    }*/
                 }
 
                 cbr.close();

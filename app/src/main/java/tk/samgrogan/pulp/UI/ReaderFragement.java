@@ -96,11 +96,11 @@ public class ReaderFragement extends Fragment {
                 bitmaps = cbr.getBitmap(cache);
                 cbr.close();
             }else {
-                cbz = new ReadCBZ();
+                /*cbz = new ReadCBZ();
                 cbz.read(file.toString());
                 cbz.getCbz();
                 cbz.CbzComic();
-                bitmaps = cbz.getPage(page);
+                bitmaps = cbz.getPage(page);*/
             }
 
             //bitmaps.add(cbr.getPage(5, 450));
