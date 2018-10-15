@@ -165,7 +165,7 @@ public class ShortBoxFragment extends Fragment {
 
         @Override
         protected Bitmap doInBackground(Object... params) {
-            cbr = new ReadCBR();
+            //cbr = new ReadCBR();
             //cbz = new ReadCBZ();
 
             folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
@@ -181,10 +181,10 @@ public class ShortBoxFragment extends Fragment {
                 }else {
 
                     if (file.endsWith(".cbr")) {
-                        cbr.read(file);
+                        /*cbr.read(file);
                         cbr.getCbr();
                         File cache = cbr.getBitmapFile(mContext, 0);
-                        comics.setBitmaps(cbr.getBitmap(cache));
+                        comics.setBitmaps(cbr.getBitmap(cache));*/
                     } else {
                         /*cbz.read(file);
                         ZipFile zip = cbz.getCbz();
@@ -195,7 +195,7 @@ public class ShortBoxFragment extends Fragment {
                     }
                 }
 
-                cbr.close();
+                //cbr.close();
             }
             return null;
         }

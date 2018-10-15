@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import junrar.exception.RarException
 import kotlinx.android.synthetic.main.cover_fragment.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -22,6 +23,7 @@ import tk.samgrogan.pulp.Models.Comics
 import tk.samgrogan.pulp.R
 import tk.samgrogan.pulp.adapters.SwipeRecyclerViewAdapter
 import java.io.File
+import java.io.IOException
 import java.util.*
 
 
@@ -102,10 +104,10 @@ class CoverFragment : Fragment() {
         val files: MutableList<File> = mutableListOf()
 
         doAsync {
-            cbr = ReadCBR()
             //mNewValues = new ContentValues();
             folder = File(Environment.getExternalStorageDirectory().toString())
             Log.d("path", folder.toString())
+            //checkFiles(folder, files)
             checkFiles(folder, files)
             Log.d("files", files.toString())
             for (i in files.indices) {
@@ -114,12 +116,13 @@ class CoverFragment : Fragment() {
                 comics.setFilenames(file)
 
                 if (file.name.endsWith(".cbr")) {
-                    cbr.read(file.toString())
-                    cbr.cbr
-                    val cache = cbr.getBitmapFile(mContext, 0)
-                    comics.setBitmaps(cbr.getBitmap(cache))
-                    filePaths.add(file.toString())
-
+                    try {
+                        cbr = ReadCBR(file.toString())
+                        val cache = cbr.getBitmapFile(context, 0)
+                        comics.setBitmaps(cbr.getBitmap(cache))
+                        filePaths.add(file.toString())
+                    }catch (e:RarException) {}
+                    catch (e: IOException){}
                 } else {
                     cbz = ReadCBZ(file.toString())
                     val zip = cbz.cbz

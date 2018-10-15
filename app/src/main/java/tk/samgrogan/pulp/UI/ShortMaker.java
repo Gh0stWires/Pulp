@@ -223,7 +223,7 @@ public class ShortMaker extends Fragment implements LoaderManager.LoaderCallback
 
         @Override
         protected Bitmap doInBackground(Object... params) {
-            cbr = new ReadCBR();
+            //cbr = new ReadCBR();
             //cbz = new ReadCBZ();
             //mNewValues = new ContentValues();
             folder = new File(String.valueOf(Environment.getExternalStorageDirectory()));
@@ -240,14 +240,14 @@ public class ShortMaker extends Fragment implements LoaderManager.LoaderCallback
                 comics.setFilenames(file);
 
                 if (file.getName().endsWith(".cbr")) {
-                    cbr.read(file.toString());
+                    /*cbr.read(file.toString());
                     cbr.getCbr();
                     if (isCancelled()){
                         break;
                     }
                     File cache = cbr.getBitmapFile(mContext, 0);
                     baseComicList.add(new BaseComic(file.getPath(),cbr.getBitmap(cache)));
-                    comics.setBitmaps(cbr.getBitmap(cache));
+                    comics.setBitmaps(cbr.getBitmap(cache));*/
                 } else {
                     /*cbz.read(file.toString());
                     ZipFile zip = cbz.getCbz();
@@ -258,7 +258,7 @@ public class ShortMaker extends Fragment implements LoaderManager.LoaderCallback
                     }*/
                 }
 
-                cbr.close();
+                //cbr.close();
                 //mCursor.close();
 
             }

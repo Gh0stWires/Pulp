@@ -179,11 +179,11 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
         @Override
         protected Bitmap doInBackground(Integer... params) {
             if(file.getName().endsWith(".cbr")) {
-                cbr = new ReadCBR();
+                /*cbr = new ReadCBR();
                 cbr.read(file.toString());
                 cbr.getCbr();
                 fileHeaderList = cbr.getPages();
-                cbr.close();
+                cbr.close();*/
             }else {
                /* cbz = new ReadCBZ();
                 cbz.read(file.toString());

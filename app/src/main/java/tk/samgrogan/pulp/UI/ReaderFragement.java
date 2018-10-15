@@ -87,14 +87,14 @@ public class ReaderFragement extends Fragment {
         @Override
         protected Bitmap doInBackground(Integer... params) {
             if (file.getName().endsWith(".cbr")) {
-                cbr = new ReadCBR();
+                /*cbr = new ReadCBR();
                 cbr.read(file.toString());
                 cbr.getCbr();
                 //for (int i = 0; i < fileHeaderList.size(); i++) {
                 //cbr.getBitmapFile(getApplicationContext(), i);
                 File cache = cbr.getBitmapFile(getContext(),page);
                 bitmaps = cbr.getBitmap(cache);
-                cbr.close();
+                cbr.close();*/
             }else {
                 /*cbz = new ReadCBZ();
                 cbz.read(file.toString());
