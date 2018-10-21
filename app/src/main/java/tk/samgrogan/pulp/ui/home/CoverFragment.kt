@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.UI
+package tk.samgrogan.pulp.ui.home
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import junrar.exception.RarException
 import kotlinx.android.synthetic.main.cover_fragment.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -23,7 +22,6 @@ import tk.samgrogan.pulp.Models.Comics
 import tk.samgrogan.pulp.R
 import tk.samgrogan.pulp.adapters.SwipeRecyclerViewAdapter
 import java.io.File
-import java.io.IOException
 import java.util.*
 
 
@@ -97,6 +95,7 @@ class CoverFragment : Fragment() {
         }
     }
 
+
     private fun getComics() {
         lateinit var folder: File
         lateinit var cbr: ReadCBR
@@ -116,13 +115,13 @@ class CoverFragment : Fragment() {
                 comics.setFilenames(file)
 
                 if (file.name.endsWith(".cbr")) {
-                    try {
-                        cbr = ReadCBR(file.toString())
+                    cbr = ReadCBR(file.toString())
+                    if (cbr.cbr != null) {
                         val cache = cbr.getBitmapFile(context, 0)
                         comics.setBitmaps(cbr.getBitmap(cache))
                         filePaths.add(file.toString())
-                    }catch (e:RarException) {}
-                    catch (e: IOException){}
+                    }
+                    //cbr.cbr?.close()
                 } else {
                     cbz = ReadCBZ(file.toString())
                     val zip = cbz.cbz

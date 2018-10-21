@@ -17,15 +17,14 @@ import java.util.*
  */
 class ReadCBR(filename: String) {
     
-    private var mPages: List<FileHeader>? = null
-    internal var cbr: Archive = Archive(File(filename))
-
-    private val headers: List<FileHeader>?
-        get() {
-            val fileHeaders = cbr?.fileHeaders
-            Collections.sort(fileHeaders, Comp())
-            return fileHeaders
-        }
+    private var mPages = mutableListOf<Any>()
+    internal var isError = false
+    internal var cbr: Archive? = try {
+        Archive(File(filename))
+    } catch (e: NullPointerException) {
+        error(true)
+        null
+    }
 
     fun checkExists(): Boolean {
         return try {
@@ -37,11 +36,22 @@ class ReadCBR(filename: String) {
             false
         }
     }
+
+    fun getHeaders(): MutableList<FileHeader>? {
+        val fileHeaders = cbr?.fileHeaders
+        Collections.sort(fileHeaders, Comp())
+        return fileHeaders
+    }
+
+
+    fun error(boolean: Boolean) {
+        isError = boolean
+    }
     /*val pages: List<FileHeader>
         get() = mPages = headers*/
 
     fun getBitmapFile(context: Context?, pageNum: Int): File? {
-        val files = headers
+        val files = getHeaders()
         val uri = getmFileName()
         var file: FileOutputStream? = null
         var c: File? = null

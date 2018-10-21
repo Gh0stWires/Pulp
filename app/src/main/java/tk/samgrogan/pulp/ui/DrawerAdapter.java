@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.UI;
+package tk.samgrogan.pulp.ui;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

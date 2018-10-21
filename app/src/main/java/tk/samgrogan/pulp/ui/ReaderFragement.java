@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.UI;
+package tk.samgrogan.pulp.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

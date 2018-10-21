@@ -27,7 +27,6 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junrar.exception.RarException;
@@ -109,7 +108,7 @@ public class Archive implements Closeable {
 		dataIO = new ComprDataIO(this);
 	}
 
-	public Archive(File firstVolume) throws RarException, IOException {
+	public Archive(File firstVolume) throws RarException, IOException, NullPointerException {
 		this(new FileVolumeManager(firstVolume), null);
 	}
 
@@ -132,16 +131,7 @@ public class Archive implements Closeable {
 		totalPackedRead = 0L;
 		close();
 		rof = file;
-		try {
-			readHeaders(length);
-		} catch (Exception e) {
-			logger.log(Level.WARNING,
-					"exception in archive constructor maybe file is encrypted "
-							+ "or currupt", e);
-			// ignore exceptions to allow exraction of working files in
-			// corrupt archive
-		}
-		// Calculate size of packed Data
+		readHeaders(length);
 		for (BaseBlock block : headers) {
 			if (block.getHeaderType() == UnrarHeadertype.FileHeader) {
 				totalPackedSize += ((FileHeader) block).getFullPackSize();
@@ -151,6 +141,14 @@ public class Archive implements Closeable {
 			unrarCallback.volumeProgressChanged(totalPackedRead,
 					totalPackedSize);
 		}
+			/*logger.log(Level.WARNING,
+					"exception in archive constructor maybe file is encrypted "
+							+ "or currupt", e);*/
+			// ignore exceptions to allow exraction of working files in
+			// corrupt archive
+			// ^ that is a bad idea there may be no readable files
+		// Calculate size of packed Data
+
 	}
 
 	public void bytesReadRead(int count) {
@@ -223,7 +221,7 @@ public class Archive implements Closeable {
 	 *            Length of file.
 	 * @throws RarException
 	 */
-	private void readHeaders(long fileLength) throws IOException, RarException {
+	private void readHeaders(long fileLength) throws IOException {
 		markHead = null;
 		newMhd = null;
 		headers.clear();
@@ -256,8 +254,7 @@ public class Archive implements Closeable {
 			case MarkHeader:
 				markHead = new MarkHeader(block);
 				if (!markHead.isSignature()) {
-					throw new RarException(
-							RarException.RarExceptionType.badRarArchive);
+
 				}
 				headers.add(markHead);
 				// markHead.print();
@@ -272,8 +269,7 @@ public class Archive implements Closeable {
 				headers.add(mainhead);
 				this.newMhd = mainhead;
 				if (newMhd.isEncrypted()) {
-					throw new RarException(
-							RarExceptionType.rarEncryptedException);
+
 				}
 				// mainhead.print();
 				break;
@@ -426,8 +422,6 @@ public class Archive implements Closeable {
 				}
 				default:
 					logger.warning("Unknown Header");
-					throw new RarException(RarExceptionType.notRarArchive);
-
 				}
 			}
 			// logger.info("\n--------end header--------");

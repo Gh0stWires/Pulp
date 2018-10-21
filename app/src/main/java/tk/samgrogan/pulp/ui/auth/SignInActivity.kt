@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.UI
+package tk.samgrogan.pulp.ui.auth
 
 import android.app.Activity
 import android.content.Intent
@@ -12,6 +12,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import tk.samgrogan.pulp.R
+import tk.samgrogan.pulp.ui.MainActivity
 import java.util.*
 
 class SignInActivity : AppCompatActivity() {

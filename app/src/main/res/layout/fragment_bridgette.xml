@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="tk.samgrogan.pulp.UI.ShortMaker"
+    tools:context="tk.samgrogan.pulp.ui.ShortMaker"
     android:background="@color/pulp">
     <GridView
         android:layout_width="wrap_content"

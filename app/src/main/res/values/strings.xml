@@ -43,4 +43,7 @@
     <string name="pos_button">Create</string>
     <string name="neg_button">Cancel</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

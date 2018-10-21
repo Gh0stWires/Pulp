@@ -5,6 +5,6 @@
 
     <fragment
         android:id="@+id/homeDestination"
-        android:name="tk.samgrogan.pulp.UI.CoverFragment"
+        android:name="tk.samgrogan.pulp.ui.home.CoverFragment"
         android:label="CoverFragment" />
 </navigation>

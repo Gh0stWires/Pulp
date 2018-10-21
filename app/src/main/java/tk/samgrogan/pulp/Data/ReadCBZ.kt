@@ -18,7 +18,7 @@ class ReadCBZ(fileName: String) {
 
     internal var cbz: ZipFile = ZipFile(File(fileName))
     private var mPages: MutableList<String> = mutableListOf()
-    val pages: List<*>?
+    val pages: MutableList<String>
         get() = mPages
 
     fun close() {
