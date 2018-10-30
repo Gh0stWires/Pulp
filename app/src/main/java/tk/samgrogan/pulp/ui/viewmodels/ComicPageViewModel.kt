@@ -1,25 +1,27 @@
 package tk.samgrogan.pulp.ui.viewmodels
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import junrar.rarfile.FileHeader
-import tk.samgrogan.pulp.Data.ReadCBR
-import tk.samgrogan.pulp.Data.ReadCBZ
+import tk.samgrogan.pulp.data.ReadCBR
+import tk.samgrogan.pulp.data.ReadCBZ
 import java.io.File
 
-class ComicPageViewModel(val filename: String): ViewModel() {
+class ComicPageViewModel: ViewModel() {
 
     var filesCbr: MutableList<FileHeader>? = mutableListOf()
     var filesCbz: MutableList<String>? = mutableListOf()
 
-    fun getComicPages() {
+    fun getComicPages(filename: String?) {
         var file = File(filename)
         if (file.name.endsWith(".cbr")) {
             val cbr = ReadCBR(file.toString())
             filesCbr = cbr.getHeaders()
         } else {
-            val cbz = ReadCBZ(file.name)
+            val cbz = ReadCBZ(file.toString())
             cbz.CbzComic()
             filesCbz = cbz.pages
         }
     }
+
+    fun isCbr
 }

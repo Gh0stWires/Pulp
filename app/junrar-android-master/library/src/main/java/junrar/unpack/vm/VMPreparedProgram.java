@@ -36,7 +36,7 @@ public class VMPreparedProgram
 
 	
 	private Vector<Byte> GlobalData = new Vector<Byte>();
-	private Vector<Byte> StaticData = new Vector<Byte>(); // static Data contained in DB operators
+	private Vector<Byte> StaticData = new Vector<Byte>(); // static data contained in DB operators
 	private int InitR[] = new int[7];
 
 	private int FilteredDataOffset;

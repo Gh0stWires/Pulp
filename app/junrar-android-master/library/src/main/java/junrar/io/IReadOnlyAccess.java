@@ -39,7 +39,7 @@ public interface IReadOnlyAccess {
 	 */
 	public void setPosition(long pos) throws IOException;
 
-    /** Read a single byte of Data. */
+    /** Read a single byte of data. */
     public int read() throws IOException;
 
 	/**
@@ -50,7 +50,7 @@ public interface IReadOnlyAccess {
     /**
      * Read exactly <tt>count</tt> bytes to the specified buffer.
      *
-	 * @param buffer where to store the read Data
+	 * @param buffer where to store the read data
 	 * @param count how many bytes to read
 	 * @return bytes read || -1 if  IO problem 
 	 */

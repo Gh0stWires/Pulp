@@ -24,7 +24,7 @@ import junrar.io.Raw;
 
 
 /**
- * Base class of headers that contain Data
+ * Base class of headers that contain data
  *
  * @author $LastChangedBy$
  * @version $LastChangedRevision$

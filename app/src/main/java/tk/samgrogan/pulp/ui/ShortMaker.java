@@ -12,8 +12,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,17 +36,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tk.samgrogan.pulp.Data.BaseComic;
-import tk.samgrogan.pulp.Data.ComicColumns;
-import tk.samgrogan.pulp.Data.ComicProvider;
-import tk.samgrogan.pulp.Data.ReadCBR;
-import tk.samgrogan.pulp.Data.ReadCBZ;
+import tk.samgrogan.pulp.data.BaseComic;
+import tk.samgrogan.pulp.data.ComicColumns;
+import tk.samgrogan.pulp.data.ComicProvider;
+import tk.samgrogan.pulp.data.ReadCBR;
+import tk.samgrogan.pulp.data.ReadCBZ;
 import tk.samgrogan.pulp.Models.ComicDataObject;
 import tk.samgrogan.pulp.Models.Comics;
 import tk.samgrogan.pulp.R;
 
-import static android.support.design.widget.BaseTransientBottomBar.LENGTH_LONG;
-import static android.support.design.widget.Snackbar.make;
+import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG;
+import static com.google.android.material.snackbar.Snackbar.make;
 
 public class ShortMaker extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 

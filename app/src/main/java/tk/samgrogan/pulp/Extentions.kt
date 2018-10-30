@@ -1,13 +1,14 @@
 package tk.samgrogan.pulp
 
 import android.graphics.BitmapFactory
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import junrar.Archive
 import junrar.exception.RarException
 import junrar.rarfile.FileHeader
+import tk.samgrogan.pulp.data.CoverPage
 import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipEntry
@@ -45,4 +46,11 @@ fun FileHeader.isImage(cbr: Archive?): Boolean {
 
     BitmapFactory.decodeStream(input, null, opt)
     return opt.outWidth != -1 && opt.outHeight != -1
+}
+
+fun MutableList<CoverPage>.recycle() {
+    val topItem = this[0]
+    this.removeAt(0)
+    this.add(topItem)
+
 }

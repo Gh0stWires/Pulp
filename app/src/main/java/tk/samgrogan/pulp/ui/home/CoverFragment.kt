@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.cover_fragment.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -16,11 +18,13 @@ import swipeable.com.layoutmanager.OnItemSwiped
 import swipeable.com.layoutmanager.SwipeableLayoutManager
 import swipeable.com.layoutmanager.SwipeableTouchHelperCallback
 import swipeable.com.layoutmanager.touchelper.ItemTouchHelper
-import tk.samgrogan.pulp.Data.ReadCBR
-import tk.samgrogan.pulp.Data.ReadCBZ
 import tk.samgrogan.pulp.Models.Comics
 import tk.samgrogan.pulp.R
 import tk.samgrogan.pulp.adapters.SwipeRecyclerViewAdapter
+import tk.samgrogan.pulp.data.CoverPage
+import tk.samgrogan.pulp.data.ReadCBR
+import tk.samgrogan.pulp.data.ReadCBZ
+import tk.samgrogan.pulp.recycle
 import java.io.File
 import java.util.*
 
@@ -35,6 +39,7 @@ class CoverFragment : Fragment() {
     private var bitmaps: MutableList<Bitmap> = mutableListOf()
     private var mContext: Context? = null
     private val filePaths = ArrayList<String>()
+    private var coverPages: MutableList<CoverPage> = mutableListOf()
     private val comics = Comics()
 
 
@@ -49,29 +54,39 @@ class CoverFragment : Fragment() {
         progress.visibility = View.VISIBLE
 
         val swipeableTouchHelperCallback = SwipeableTouchHelperCallback(object : OnItemSwiped {
-            override fun onItemSwipedDown() {
-            }
 
-            override fun onItemSwipedUp() {
-            }
 
             //Called after swiping view, place to remove top item from your recyclerview adapter
             override fun onItemSwiped() {
-                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).recycleBooks()
-            }
-
-            override fun onItemSwipedLeft() {
 
             }
 
             override fun onItemSwipedRight() {
+                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).coverPhotos.recycle()
+                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).notifyDataSetChanged()
+                coverPages.recycle()
 
             }
         })
+
         val itemTouchHelper = ItemTouchHelper(swipeableTouchHelperCallback as ItemTouchHelper.Callback?)
         itemTouchHelper.attachToRecyclerView(coverRecyclerView)
         coverRecyclerView.layoutManager = SwipeableLayoutManager()
-        coverRecyclerView.adapter = SwipeRecyclerViewAdapter()
+        coverRecyclerView.adapter = SwipeRecyclerViewAdapter(object: MotionLayout.TransitionListener {
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+                //coverRecyclerView.alpha = 0.5f
+                //coverRecyclerView.background = resources.getDrawable(R.color.pulp)
+            }
+
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).coverPhotos.recycle()
+                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).notifyDataSetChanged()
+                coverPages.recycle()
+                NavHostFragment.findNavController(this@CoverFragment).navigate(CoverFragmentDirections.ComicReadAction(coverPages[0].filename))
+
+            }
+            // More code here
+        })
         getComics()
     }
 
@@ -101,16 +116,13 @@ class CoverFragment : Fragment() {
         lateinit var cbr: ReadCBR
         lateinit var cbz: ReadCBZ
         val files: MutableList<File> = mutableListOf()
-
+        //TODO turn this into a viewmodel
         doAsync {
-            //mNewValues = new ContentValues();
             folder = File(Environment.getExternalStorageDirectory().toString())
             Log.d("path", folder.toString())
-            //checkFiles(folder, files)
             checkFiles(folder, files)
             Log.d("files", files.toString())
             for (i in files.indices) {
-                //
                 val file = files[i]
                 comics.setFilenames(file)
 
@@ -118,26 +130,24 @@ class CoverFragment : Fragment() {
                     cbr = ReadCBR(file.toString())
                     if (cbr.cbr != null) {
                         val cache = cbr.getBitmapFile(context, 0)
-                        comics.setBitmaps(cbr.getBitmap(cache))
-                        filePaths.add(file.toString())
+                        val coverPage = CoverPage(file.absolutePath, cbr.getBitmap(cache))
+                        coverPages.add(coverPage)
                     }
-                    //cbr.cbr?.close()
                 } else {
                     cbz = ReadCBZ(file.toString())
                     val zip = cbz.cbz
                     if (zip != null) {
                         cbz.CbzComic()
-                        comics.setBitmaps(cbz.getPage(0))
-                        filePaths.add(file.toString())
+                        val coverPage = CoverPage(file.absolutePath, cbz.getPage(0))
+                        coverPages.add(coverPage)
                     }
                 }
-
-                //cbr.close();
             }
             uiThread {
                 //TODO figure out home button invalidation bug
-                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).swap(bitmaps)
+                (coverRecyclerView.adapter as SwipeRecyclerViewAdapter).swap(coverPages)
                 progress.visibility = View.GONE
+
 
             }
         }

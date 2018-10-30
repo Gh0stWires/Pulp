@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/homeDestination">
 
     <fragment
         android:id="@+id/homeDestination"
         android:name="tk.samgrogan.pulp.ui.home.CoverFragment"
-        android:label="CoverFragment" />
+        android:label="CoverFragment" >
+        <action
+            android:id="@+id/comicReadAction"
+            app:destination="@id/comicReadDestination"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/comicReadDestination"
+        android:name="tk.samgrogan.pulp.ui.reader.ComicReadFragment"
+        android:label="fragment_comic_reader"
+        tools:layout="@layout/fragment_comic_reader" >
+        <argument
+            android:name="filename"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.Data;
+package tk.samgrogan.pulp.data;
 
 /**
  * Created by ghost on 3/10/2017.

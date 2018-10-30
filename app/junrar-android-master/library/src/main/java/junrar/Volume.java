@@ -33,7 +33,7 @@ public interface Volume {
 	IReadOnlyAccess getReadOnlyAccess() throws IOException;
 
 	/**
-	 * @return the Data length
+	 * @return the data length
 	 */
 	long getLength();
 	

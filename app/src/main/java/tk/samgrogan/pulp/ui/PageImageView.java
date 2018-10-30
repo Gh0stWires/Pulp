@@ -6,7 +6,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -17,9 +17,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.OverScroller;
 
-import tk.samgrogan.pulp.Data.Constants;
+import tk.samgrogan.pulp.data.Constants;
 
-public class PageImageView extends android.support.v7.widget.AppCompatImageView {
+public class PageImageView extends androidx.appcompat.widget.AppCompatImageView {
     private Constants.PageViewMode mViewMode;
     private boolean mHaveFrame = false;
     private boolean mSkipScaling = false;

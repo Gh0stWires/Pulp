@@ -57,7 +57,7 @@ public class ReadOnlyAccessByteArray implements IReadOnlyAccess{
 		}
 	}
 
-    /** Read a single byte of Data. */
+    /** Read a single byte of data. */
     public int read() throws IOException {
         return file[positionInFile++];
     }

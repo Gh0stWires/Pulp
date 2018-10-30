@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -13,8 +13,8 @@ import android.widget.ImageView;
 
 import java.io.File;
 
-import tk.samgrogan.pulp.Data.ReadCBR;
-import tk.samgrogan.pulp.Data.ReadCBZ;
+import tk.samgrogan.pulp.data.ReadCBR;
+import tk.samgrogan.pulp.data.ReadCBZ;
 import tk.samgrogan.pulp.R;
 
 

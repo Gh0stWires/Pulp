@@ -1,15 +1,16 @@
 package tk.samgrogan.pulp.adapters
 
-import android.graphics.Bitmap
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import tk.samgrogan.pulp.R
+import tk.samgrogan.pulp.data.CoverPage
 import tk.samgrogan.pulp.inflate
 
-class SwipeRecyclerViewAdapter: RecyclerView.Adapter<SwipeRecyclerViewAdapter.SwipeViewHolder>() {
-    private var coverPhotos: MutableList<Bitmap> = mutableListOf()
+class SwipeRecyclerViewAdapter(val listener: MotionLayout.TransitionListener): RecyclerView.Adapter<SwipeRecyclerViewAdapter.SwipeViewHolder>() {
+    var coverPhotos: MutableList<CoverPage> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SwipeViewHolder {
         return SwipeViewHolder(parent.inflate(R.layout.first_page_display))
     }
@@ -19,11 +20,13 @@ class SwipeRecyclerViewAdapter: RecyclerView.Adapter<SwipeRecyclerViewAdapter.Sw
     }
 
     override fun onBindViewHolder(holder: SwipeViewHolder, position: Int) {
-        val coverImage = coverPhotos[position]
-        holder.cover.setImageBitmap(coverImage)
+        val coverPage = coverPhotos[position]
+        holder.cover.setImageBitmap(coverPage.coverImage)
+        holder.anim.setTransitionListener( listener )
+
     }
 
-    fun swap(coverPhotos: MutableList<Bitmap>) {
+    fun swap(coverPhotos: MutableList<CoverPage>) {
         this.coverPhotos.clear()
         this.coverPhotos.addAll(coverPhotos)
     }
@@ -37,5 +40,7 @@ class SwipeRecyclerViewAdapter: RecyclerView.Adapter<SwipeRecyclerViewAdapter.Sw
 
     inner class SwipeViewHolder internal constructor(view: View): RecyclerView.ViewHolder(view){
         internal var cover: ImageView = itemView.findViewById(R.id.coverImage)
+        internal var anim: MotionLayout = itemView.findViewById(R.id.motion_container)
     }
 }
+

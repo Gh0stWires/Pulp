@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.Data
+package tk.samgrogan.pulp.data
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

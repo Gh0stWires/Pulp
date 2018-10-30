@@ -5,35 +5,30 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.Wearable;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.samgrogan.pulp.Data.ComicColumns;
-import tk.samgrogan.pulp.Data.ComicProvider;
-import tk.samgrogan.pulp.Data.ReadCBR;
-import tk.samgrogan.pulp.Data.ReadCBZ;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import tk.samgrogan.pulp.R;
+import tk.samgrogan.pulp.data.ComicColumns;
+import tk.samgrogan.pulp.data.ComicProvider;
+import tk.samgrogan.pulp.data.ReadCBR;
+import tk.samgrogan.pulp.data.ReadCBZ;
 
-public class ReaderActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, DataApi.DataListener, GoogleApiClient.OnConnectionFailedListener {
+public class ReaderActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private List fileHeaderList = new ArrayList<>();
     private String mFilename;
@@ -63,7 +58,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFilename);
         mPager.setOffscreenPageLimit(3);
 
-        mWear = new GoogleApiClient.Builder(this).addApi(Wearable.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
+        //mWear = new GoogleApiClient.Builder(this).addApi(Wearable.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 
         mCursor = getContentResolver().query(ComicProvider.Comics.CONTENT_URI,
                 new String[]{ComicColumns.PAGE}, ComicColumns.TITLE + "= ?",
@@ -105,7 +100,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d("Wear","Connected");
-        Wearable.DataApi.addListener(mWear,this);
+        //Wearable.DataApi.addListener(mWear,this);
     }
 
     @Override
@@ -130,10 +125,10 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
     protected void onPause() {
         super.onPause();
         mWear.disconnect();
-        Wearable.DataApi.removeListener(mWear, this);
+        //Wearable.DataApi.removeListener(mWear, this);
     }
 
-    @Override
+    /*@Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
         for (DataEvent event : dataEventBuffer){
             if (event.getType() == DataEvent.TYPE_CHANGED){
@@ -146,7 +141,7 @@ public class ReaderActivity extends AppCompatActivity implements GoogleApiClient
                 }
             }
         }
-    }
+    }*/
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         List data;

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import tk.samgrogan.pulp.Data.BaseComic;
+import tk.samgrogan.pulp.data.BaseComic;
 import tk.samgrogan.pulp.R;
 
 /**

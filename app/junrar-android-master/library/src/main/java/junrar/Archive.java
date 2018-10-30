@@ -77,10 +77,10 @@ public class Archive implements Closeable {
 
 	private int currentHeaderIndex;
 
-	/** Size of packed Data in current file. */
+	/** Size of packed data in current file. */
 	private long totalPackedSize = 0L;
 
-	/** Number of bytes of compressed Data read from current file. */
+	/** Number of bytes of compressed data read from current file. */
 	private long totalPackedRead = 0L;
 
 	private VolumeManager volumeManager;
@@ -96,7 +96,7 @@ public class Archive implements Closeable {
 	 * 
 	 * @param volumeManager
 	 *            the the {@link VolumeManager} that will provide volume stream
-	 *            Data
+	 *            data
 	 * @throws RarException
 	 */
 	public Archive(VolumeManager volumeManager, UnrarCallback unrarCallback)
@@ -147,7 +147,7 @@ public class Archive implements Closeable {
 			// ignore exceptions to allow exraction of working files in
 			// corrupt archive
 			// ^ that is a bad idea there may be no readable files
-		// Calculate size of packed Data
+		// Calculate size of packed data
 
 	}
 
@@ -323,7 +323,7 @@ public class Archive implements Closeable {
 					// logger.info("HeaderType: endarch\ndatacrc:"+
 					// endArcHead.getArchiveDataCRC());
 				} else {
-					// logger.info("HeaderType: endarch - no Data");
+					// logger.info("HeaderType: endarch - no data");
 					endArcHead = new EndArcHeader(block, null);
 				}
 				headers.add(endArcHead);
@@ -469,7 +469,7 @@ public class Archive implements Closeable {
 		final PipedInputStream in = new PipedInputStream(32 * 1024);
 		final PipedOutputStream out = new PipedOutputStream(in);
 
-		// creates a new thread that will write Data to the pipe. Data will be
+		// creates a new thread that will write data to the pipe. data will be
 		// available in another InputStream, connected to the OutputStream.
 		new Thread(new Runnable() {
 			public void run() {

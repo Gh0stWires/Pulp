@@ -660,17 +660,17 @@ public class RarVM extends BitInput {
 				prg.getCmd().add(curCmd);
 				prg.setCmdCount(prg.getCmdCount()+1);
 				// TODO
-				// curCmd->Op1.Data=FilterType;
-				// >>>>>> CurCmd->Op1.Addr=&CurCmd->Op1.Data; <<<<<<<<<< not set
+				// curCmd->Op1.data=FilterType;
+				// >>>>>> CurCmd->Op1.Addr=&CurCmd->Op1.data; <<<<<<<<<< not set
 				// do i need to ?
-				// >>>>>> CurCmd->Op2.Addr=&CurCmd->Op2.Data; <<<<<<<<<< "
+				// >>>>>> CurCmd->Op2.Addr=&CurCmd->Op2.data; <<<<<<<<<< "
 				// CurCmd->Op1.Type=CurCmd->Op2.Type=VM_OPNONE;
 				// CodeSize=0;
 			}
 			int dataFlag = fgetbits();
 			faddbits(1);
 
-			// Read static Data contained in DB operators. This Data cannot be
+			// Read static data contained in DB operators. This data cannot be
 			// changed,
 			// it is a part of VM code, not a filter parameter.
 
@@ -741,8 +741,8 @@ public class RarVM extends BitInput {
 		}
 		VMPreparedCommand curCmd = new VMPreparedCommand();
 		curCmd.setOpCode(VMCommands.VM_RET);
-		// TODO CurCmd->Op1.Addr=&CurCmd->Op1.Data;
-		// CurCmd->Op2.Addr=&CurCmd->Op2.Data;
+		// TODO CurCmd->Op1.Addr=&CurCmd->Op1.data;
+		// CurCmd->Op2.Addr=&CurCmd->Op2.data;
 		curCmd.getOp1().setType(VMOpType.VM_OPNONE);
 		curCmd.getOp2().setType(VMOpType.VM_OPNONE);
 
@@ -750,9 +750,9 @@ public class RarVM extends BitInput {
 		// {
 		// VM_PreparedCommand *Cmd=&Prg->Cmd[I];
 		// if (Cmd->Op1.Addr==NULL)
-		// Cmd->Op1.Addr=&Cmd->Op1.Data;
+		// Cmd->Op1.Addr=&Cmd->Op1.data;
 		// if (Cmd->Op2.Addr==NULL)
-		// Cmd->Op2.Addr=&Cmd->Op2.Data;
+		// Cmd->Op2.Addr=&Cmd->Op2.data;
 		// }
 
 		prg.getCmd().add(curCmd);
@@ -935,15 +935,15 @@ public class RarVM extends BitInput {
 		          {
 //		#ifdef PRESENT_INT32
 //		            sint32 Offset=CurPos+FileOffset;
-//		            sint32 Addr=GET_VALUE(false,Data);
+//		            sint32 Addr=GET_VALUE(false,data);
 //		            if (Addr<0)
 //		            {
 //		              if (Addr+Offset>=0)
-//		                SET_VALUE(false,Data,Addr+FileSize);
+//		                SET_VALUE(false,data,Addr+FileSize);
 //		            }
 //		            else
 //		              if (Addr<FileSize)
-//		                SET_VALUE(false,Data,Addr-Offset);
+//		                SET_VALUE(false,data,Addr-Offset);
 //		#else
 		            long offset=curPos+fileOffset;
 		            long Addr=getValue(false,mem,curPos);
@@ -1011,7 +1011,7 @@ public class RarVM extends BitInput {
 		        if (dataSize>=VM_GLOBALMEMADDR/2){
 		          break;
 		        }
-//		 bytes from same channels are grouped to continual Data blocks,
+//		 bytes from same channels are grouped to continual data blocks,
 //		 so we need to place them back to their interleaving positions
 
 		        for (int curChannel=0;curChannel<channels;curChannel++)
@@ -1206,8 +1206,8 @@ public class RarVM extends BitInput {
 
 	public void setMemory(int pos,byte[] data,int offset,int dataSize)
 	{
-	  if (pos<VM_MEMSIZE){ //&& Data!=Mem+Pos)
-	    //memmove(Mem+Pos,Data,Min(DataSize,VM_MEMSIZE-Pos));
+	  if (pos<VM_MEMSIZE){ //&& data!=Mem+Pos)
+	    //memmove(Mem+Pos,data,Min(DataSize,VM_MEMSIZE-Pos));
 	    for (int i = 0; i < Math.min(data.length-offset,dataSize); i++) {
 			if((VM_MEMSIZE-pos)<i){
 				break;

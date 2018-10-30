@@ -1,10 +1,10 @@
-package tk.samgrogan.pulp.Data;
+package tk.samgrogan.pulp.data;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.RemoteViews;
 
 import tk.samgrogan.pulp.R;

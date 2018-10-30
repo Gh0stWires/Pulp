@@ -1,4 +1,4 @@
-package tk.samgrogan.pulp.Data;
+package tk.samgrogan.pulp.data;
 
 import android.net.Uri;
 
@@ -13,7 +13,7 @@ import net.simonvt.schematic.annotation.TableEndpoint;
 @ContentProvider(authority = ComicProvider.AUTHORITY, database = ComicDB.class)
 public class ComicProvider {
 
-    public static final String AUTHORITY = "tk.samgrogan.pulp.Data.ComicProvider";
+    public static final String AUTHORITY = "tk.samgrogan.pulp.data.ComicProvider";
 
     public static Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 

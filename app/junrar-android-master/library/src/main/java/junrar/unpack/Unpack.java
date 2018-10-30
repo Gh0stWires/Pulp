@@ -392,7 +392,7 @@ public final class Unpack extends Unpack20 {
 		    VMPreparedProgram Prg = flt.getPrg();
 
 		    if (ParentPrg.getGlobalData().size() > RarVM.VM_FIXEDGLOBALSIZE) {
-			// copy global Data from previous script execution if
+			// copy global data from previous script execution if
 			// any
 			// Prg->GlobalData.Alloc(ParentPrg->GlobalData.Size());
 			// memcpy(&Prg->GlobalData[VM_FIXEDGLOBALSIZE],&ParentPrg->GlobalData[VM_FIXEDGLOBALSIZE],ParentPrg->GlobalData.Size()-VM_FIXEDGLOBALSIZE);
@@ -410,7 +410,7 @@ public final class Unpack extends Unpack20 {
 		    ExecuteCode(Prg);
 
 		    if (Prg.getGlobalData().size() > RarVM.VM_FIXEDGLOBALSIZE) {
-			// save global Data for next script execution
+			// save global data for next script execution
 			if (ParentPrg.getGlobalData().size() < Prg
 				.getGlobalData().size()) {
 			    ParentPrg.getGlobalData().setSize(
@@ -447,7 +447,7 @@ public final class Unpack extends Unpack20 {
 				|| NextFilter.isNextWindow()) {
 			    break;
 			}
-			// apply several filters to same Data block
+			// apply several filters to same data block
 
 			rarVM.setMemory(0, FilteredData, 0, FilteredDataSize);// .SetMemory(0,FilteredData,FilteredDataSize);
 
@@ -456,7 +456,7 @@ public final class Unpack extends Unpack20 {
 			VMPreparedProgram NextPrg = NextFilter.getPrg();
 
 			if (pPrg.getGlobalData().size() > RarVM.VM_FIXEDGLOBALSIZE) {
-			    // copy global Data from previous script execution
+			    // copy global data from previous script execution
 			    // if any
 			    // NextPrg->GlobalData.Alloc(ParentPrg->GlobalData.Size());
 			    NextPrg.getGlobalData().setSize(
@@ -474,7 +474,7 @@ public final class Unpack extends Unpack20 {
 			ExecuteCode(NextPrg);
 
 			if (NextPrg.getGlobalData().size() > RarVM.VM_FIXEDGLOBALSIZE) {
-			    // save global Data for next script execution
+			    // save global data for next script execution
 			    if (pPrg.getGlobalData().size() < NextPrg
 				    .getGlobalData().size()) {
 				pPrg.getGlobalData().setSize(
@@ -910,7 +910,7 @@ public final class Unpack extends Unpack20 {
 
 	int StaticDataSize = Filter.getPrg().getStaticData().size();
 	if (StaticDataSize > 0 && StaticDataSize < RarVM.VM_GLOBALMEMSIZE) {
-	    // read statically defined Data contained in DB commands
+	    // read statically defined data contained in DB commands
 	    // StackFilter->Prg.StaticData.Add(StaticDataSize);
 	    StackFilter.getPrg().setStaticData(Filter.getPrg().getStaticData());
 	    // memcpy(&StackFilter->Prg.StaticData[0],&Filter->Prg.StaticData[0],StaticDataSize);
@@ -946,7 +946,7 @@ public final class Unpack extends Unpack20 {
 	for (int i = 0; i < 16; i++) {
 	    globalData.set(0x30 + i, Byte.valueOf((byte) (0)));
 	}
-	if ((firstByte & 8) != 0) // put Data block passed as parameter if any
+	if ((firstByte & 8) != 0) // put data block passed as parameter if any
 	{
 	    if (Inp.Overflow(3)) {
 		return (false);
